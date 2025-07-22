@@ -1,0 +1,199 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Purchase",
+      "roles": [
+        "purchase"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Subcontracting",
+      "roles": [
+        "subcontracting"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Sales",
+      "roles": [
+        "sales"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Store Incharge",
+      "roles": [
+        "store_incharge"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Quality Executive",
+      "roles": [
+        "quality_executive"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Purchase Manager",
+      "roles": [
+        "purchase_manager"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Production Manager",
+      "roles": [
+        "production_manager"
+      ]
+    }
+  ],
+  "processes": [
+    {
+      "id": 3,
+      "name": "Production Planning",
+      "recurring": {
+        "daily": [
+          {
+            "id": "D1",
+            "name": "Daily Production Review",
+            "assignedRole": "production_manager",
+            "trigger": {
+              "type": "time",
+              "recurrence": "daily",
+              "timeOfDay": "09:00"
+            },
+            "tasks": [
+              {
+                "id": "D1.1",
+                "name": "Review Production Plan vs Actual",
+                "status": "pending",
+                "formId": "F-PRD-01",
+                "formData": null
+              },
+              {
+                "id": "D1.2",
+                "name": "Update Daily Productivity",
+                "status": "pending",
+                "formId": "F-PRD-19",
+                "formData": null
+              }
+            ]
+          },
+          {
+            "id": "D2",
+            "name": "End of Day Report",
+            "assignedRole": "production_manager",
+            "trigger": {
+              "type": "time",
+              "recurrence": "daily",
+              "timeOfDay": "17:00"
+            },
+            "tasks": [
+              {
+                "id": "D2.1",
+                "name": "Update Daily Production Report",
+                "status": "pending",
+                "formId": "F-PRD-01",
+                "formData": null
+              },
+              {
+                "id": "D2.2",
+                "name": "Complete Final Inspection Check Sheet",
+                "status": "pending",
+                "formId": "F-PRD-07",
+                "formData": null
+              }
+            ]
+          }
+        ],
+        "monthly": [
+          {
+            "id": "M1",
+            "name": "Monthly Review",
+            "assignedRole": "production_manager",
+            "trigger": {
+              "type": "time",
+              "recurrence": "monthly",
+              "dayOfMonth": "last"
+            },
+            "tasks": [
+              {
+                "id": "M1.1",
+                "name": "Generate Monthly Productivity Report",
+                "status": "pending",
+                "formId": "F-PRD-17",
+                "formData": null
+              },
+              {
+                "id": "M1.2",
+                "name": "Complete Tool Life Tracking",
+                "status": "pending",
+                "formId": "F-MNT-09",
+                "formData": null
+              },
+              {
+                "id": "M1.3",
+                "name": "Review Monthly Schedule vs Dispatch",
+                "status": "pending",
+                "formId": "F-PRD-16",
+                "formData": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "name": "Incoming Inspection",
+      "tasks": [
+        {
+          "id": 401,
+          "name": "Receive and verify goods against PO",
+          "assignedRole": "store_incharge",
+          "status": "reopened",
+          "dependencies": [],
+          "formId": "F-QA-14",
+          "trigger": {
+            "type": "event",
+            "event": "start"
+          },
+          "formData": null
+        },
+        {
+          "id": 402,
+          "name": "Conduct quality checks, approve or reject materials",
+          "assignedRole": "quality_executive",
+          "status": "pending",
+          "dependencies": [
+            401
+          ],
+          "formId": "F-QA-30",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 401
+          }
+        },
+        {
+          "id": 403,
+          "name": "Coordinate with supplier for discrepancy resolution",
+          "assignedRole": "purchase_manager",
+          "status": "pending",
+          "dependencies": [
+            402
+          ],
+          "formId": "F-QA-57R",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 402
+          }
+        }
+      ]
+    }
+  ]
+}
