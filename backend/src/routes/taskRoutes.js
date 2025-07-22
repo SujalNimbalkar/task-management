@@ -1,15 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const {
+  getUsers,
   getTasks,
   completeTask,
   updateTask,
   submitTaskForm,
 } = require("../controllers/taskController");
 
-router.get("/", getTasks);
-router.post("/:id/complete", completeTask);
-router.post("/:id/update", updateTask);
-router.post("/:id/submit-form", submitTaskForm);
+router.get("/users", getUsers);
+
+router.get("/tasks", getTasks);
+
+router.post("/tasks/:id/complete", completeTask);
+
+router.post("/tasks/:id/update", updateTask);
+
+router.post("/tasks/:id/submit-form", submitTaskForm);
 
 module.exports = router;

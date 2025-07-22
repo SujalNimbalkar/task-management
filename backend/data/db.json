@@ -50,6 +50,391 @@
       ]
     }
   ],
+  "forms": {
+    "F-PRD-01": {
+      "name": "Daily Production Report",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "shift",
+          "label": "Shift",
+          "type": "select",
+          "options": [
+            "Morning",
+            "Afternoon",
+            "Night"
+          ],
+          "required": true
+        },
+        {
+          "id": "production_target",
+          "label": "Production Target",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "actual_production",
+          "label": "Actual Production",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "remarks",
+          "label": "Remarks",
+          "type": "textarea",
+          "required": false
+        }
+      ]
+    },
+    "F-PRD-07": {
+      "name": "Final Inspection Check Sheet",
+      "fields": [
+        {
+          "id": "inspection_date",
+          "label": "Inspection Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "batch_number",
+          "label": "Batch Number",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "inspected_quantity",
+          "label": "Inspected Quantity",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "accepted_quantity",
+          "label": "Accepted Quantity",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "rejected_quantity",
+          "label": "Rejected Quantity",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "defect_details",
+          "label": "Defect Details",
+          "type": "textarea",
+          "required": false
+        }
+      ]
+    },
+    "F-PRD-16": {
+      "name": "Monthly Schedule vs Dispatch",
+      "fields": [
+        {
+          "id": "month_year",
+          "label": "Month and Year",
+          "type": "month",
+          "required": true
+        },
+        {
+          "id": "scheduled_quantity",
+          "label": "Scheduled Quantity",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "dispatched_quantity",
+          "label": "Dispatched Quantity",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "variance",
+          "label": "Variance",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "reason_for_variance",
+          "label": "Reason for Variance",
+          "type": "textarea",
+          "required": true
+        }
+      ]
+    },
+    "F-PRD-17": {
+      "name": "Monthly Productivity Report",
+      "fields": [
+        {
+          "id": "month_year",
+          "label": "Month and Year",
+          "type": "month",
+          "required": true
+        },
+        {
+          "id": "total_production_days",
+          "label": "Total Production Days",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "total_production_hours",
+          "label": "Total Production Hours",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "total_production_quantity",
+          "label": "Total Production Quantity",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "productivity_rate",
+          "label": "Productivity Rate (Units/Hour)",
+          "type": "number",
+          "required": true
+        }
+      ]
+    },
+    "F-PRD-19": {
+      "name": "Daily Productivity Report",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "shift",
+          "label": "Shift",
+          "type": "select",
+          "options": [
+            "Morning",
+            "Afternoon",
+            "Night"
+          ],
+          "required": true
+        },
+        {
+          "id": "machine_utilization",
+          "label": "Machine Utilization (%)",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "labor_utilization",
+          "label": "Labor Utilization (%)",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "output_quantity",
+          "label": "Output Quantity",
+          "type": "number",
+          "required": true
+        }
+      ]
+    },
+    "F-MNT-09": {
+      "name": "Tool Life Tracking",
+      "fields": [
+        {
+          "id": "tool_id",
+          "label": "Tool ID",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "installation_date",
+          "label": "Installation Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "total_running_hours",
+          "label": "Total Running Hours",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "maintenance_date",
+          "label": "Last Maintenance Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "tool_condition",
+          "label": "Tool Condition",
+          "type": "select",
+          "options": [
+            "Good",
+            "Fair",
+            "Poor",
+            "Replace"
+          ],
+          "required": true
+        }
+      ]
+    },
+    "F-QA-14": {
+      "name": "Material Receipt Verification",
+      "fields": [
+        {
+          "id": "supplier_name",
+          "label": "Supplier Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "po_number",
+          "label": "Purchase Order Number",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "quantity",
+          "label": "Quantity",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "part_numbers",
+          "label": "Part Numbers",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "invoice_number",
+          "label": "Invoice Number",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "delivery_challan",
+          "label": "Delivery Challan",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "discrepancy_found",
+          "label": "Discrepancy Found?",
+          "type": "select",
+          "options": [
+            "No",
+            "Yes"
+          ],
+          "required": true
+        }
+      ]
+    },
+    "F-QA-30": {
+      "name": "Quality Inspection Checklist",
+      "fields": [
+        {
+          "id": "drawing_checked",
+          "label": "Approved Drawing Checked",
+          "type": "select",
+          "options": [
+            "Yes",
+            "No"
+          ],
+          "required": true
+        },
+        {
+          "id": "control_plan_checked",
+          "label": "Control Plan/Spec Checked",
+          "type": "select",
+          "options": [
+            "Yes",
+            "No"
+          ],
+          "required": true
+        },
+        {
+          "id": "visual_check",
+          "label": "Visual Check",
+          "type": "select",
+          "options": [
+            "Pass",
+            "Fail"
+          ],
+          "required": true
+        },
+        {
+          "id": "dimensional_check",
+          "label": "Dimensional Check",
+          "type": "select",
+          "options": [
+            "Pass",
+            "Fail"
+          ],
+          "required": true
+        },
+        {
+          "id": "functional_test",
+          "label": "Functional/Electrical Test",
+          "type": "select",
+          "options": [
+            "Pass",
+            "Fail",
+            "N/A"
+          ],
+          "required": true
+        },
+        {
+          "id": "coa_attached",
+          "label": "Certificate of Analysis (CoA) Attached",
+          "type": "select",
+          "options": [
+            "Yes",
+            "No",
+            "N/A"
+          ],
+          "required": true
+        },
+        {
+          "id": "accepted",
+          "label": "Accepted?",
+          "type": "select",
+          "options": [
+            "Yes",
+            "No"
+          ],
+          "required": true
+        }
+      ]
+    },
+    "F-QA-57R": {
+      "name": "Rejection Report",
+      "fields": [
+        {
+          "id": "rejection_reason",
+          "label": "Reason for Rejection",
+          "type": "textarea",
+          "required": true
+        },
+        {
+          "id": "rejected_quantity",
+          "label": "Rejected Quantity",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "action_taken",
+          "label": "Action Taken",
+          "type": "text",
+          "required": true
+        }
+      ]
+    }
+  },
   "processes": [
     {
       "id": 3,

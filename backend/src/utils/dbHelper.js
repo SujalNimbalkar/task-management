@@ -1,18 +1,15 @@
-const fs = require("fs/promises");
+const fs = require("fs").promises;
 const path = require("path");
 
-const DB_PATH = path.join(__dirname, "../../data/db.json");
+const dbPath = path.join(__dirname, "..", "..", "data", "db.json");
 
 async function readDB() {
-  const data = await fs.readFile(DB_PATH, "utf-8");
+  const data = await fs.readFile(dbPath, "utf8");
   return JSON.parse(data);
 }
 
 async function writeDB(data) {
-  await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2));
+  await fs.writeFile(dbPath, JSON.stringify(data, null, 2), "utf8");
 }
 
-module.exports = {
-  readDB,
-  writeDB,
-};
+module.exports = { readDB, writeDB };
