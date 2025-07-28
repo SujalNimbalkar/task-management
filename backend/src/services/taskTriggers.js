@@ -258,6 +258,34 @@ async function analyzeFormDataAndTriggerTasks(
           );
           if (!reportTask) {
             maxTaskId++;
+            // Pre-fill report formData from plan
+            let prefilledRows = [];
+            if (
+              completedTask.formData &&
+              completedTask.formData.rows &&
+              Array.isArray(completedTask.formData.rows)
+            ) {
+              prefilledRows = completedTask.formData.rows.map((row) => ({
+                dept_name: row.dept_name || "",
+                operator_name: row.operator_name || "",
+                work: row.work || "",
+                h1_plan: row.h1_plan || "",
+                h2_plan: row.h2_plan || "",
+                ot_plan: row.ot_plan || "",
+                target_qty: row.target_qty || "",
+                // Actual/report fields empty
+                h1_actual: "",
+                h2_actual: "",
+                ot_actual: "",
+                actual_production: "",
+                quality_defects: "",
+                defect_details: "",
+                responsible_person: "",
+                production_percentage: "",
+                reason: "",
+                rework: "",
+              }));
+            }
             reportTask = {
               id: maxTaskId,
               name: `Daily Production Report - Week ${weekNumber} Day ${dayNumber}`,
@@ -270,7 +298,10 @@ async function analyzeFormDataAndTriggerTasks(
                 event: "task_completed",
                 taskId: completedTask.id,
               },
-              formData: null,
+              formData: {
+                date: completedTask.formData?.date || "",
+                rows: prefilledRows,
+              },
               lastUpdated: new Date().toISOString(),
             };
             process.tasks.push(reportTask);
@@ -281,6 +312,44 @@ async function analyzeFormDataAndTriggerTasks(
             reportTask.status = "pending";
             reportTask.lastUpdated = new Date().toISOString();
             reportTask.name = `Daily Production Report - Week ${weekNumber} Day ${dayNumber}`;
+            // Only pre-fill if not already filled
+            if (
+              !reportTask.formData ||
+              !reportTask.formData.rows ||
+              reportTask.formData.rows.length === 0
+            ) {
+              let prefilledRows = [];
+              if (
+                completedTask.formData &&
+                completedTask.formData.rows &&
+                Array.isArray(completedTask.formData.rows)
+              ) {
+                prefilledRows = completedTask.formData.rows.map((row) => ({
+                  dept_name: row.dept_name || "",
+                  operator_name: row.operator_name || "",
+                  work: row.work || "",
+                  h1_plan: row.h1_plan || "",
+                  h2_plan: row.h2_plan || "",
+                  ot_plan: row.ot_plan || "",
+                  target_qty: row.target_qty || "",
+                  // Actual/report fields empty
+                  h1_actual: "",
+                  h2_actual: "",
+                  ot_actual: "",
+                  actual_production: "",
+                  quality_defects: "",
+                  defect_details: "",
+                  responsible_person: "",
+                  production_percentage: "",
+                  reason: "",
+                  rework: "",
+                }));
+              }
+              reportTask.formData = {
+                date: completedTask.formData?.date || "",
+                rows: prefilledRows,
+              };
+            }
             console.log(
               `[TRIGGER] Updated report task ${reportTask.id} for Week ${weekNumber} Day ${dayNumber}`
             );

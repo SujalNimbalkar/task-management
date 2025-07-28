@@ -24,9 +24,20 @@ const DynamicForm = ({
   disabled,
   mode = "plan",
 }) => {
+  console.log("=== DYNAMIC FORM DEBUG ===");
+  console.log("Received mode:", mode);
+  console.log("Form definition name:", formDefinition?.name);
+  console.log("=== END DYNAMIC FORM DEBUG ===");
+
   const [formData, setFormData] = useState({});
   const [tableRows, setTableRows] = useState([]);
   const [errors, setErrors] = useState({});
+  const [renderKey, setRenderKey] = useState(0);
+
+  // Force re-render when mode changes
+  useEffect(() => {
+    setRenderKey((prev) => prev + 1);
+  }, [mode]);
 
   // Initialize form data
   useEffect(() => {
@@ -166,17 +177,56 @@ const DynamicForm = ({
   // Determine which fields to show/edit
   const getFieldMode = (fieldId) => {
     // Unified production plan entry form logic
-    if (formDefinition.name === "Production Plan Entry") {
+    if (
+      formDefinition.name === "F-PRODUCTION-PLAN-ENTRY" ||
+      formDefinition.name === "Production Plan Entry"
+    ) {
       if (mode === "monthly") {
-        if (fieldId === "monthly_qty") return "edit";
         if (fieldId === "weekly_qty") return "hide";
+        if (fieldId === "monthly_qty") return "edit";
+        // item_name and customer_name always editable
         return "edit";
       } else if (mode === "weekly") {
-        if (fieldId === "monthly_qty") return "readonly";
         if (fieldId === "weekly_qty") return "edit";
-        return "readonly";
+        if (fieldId === "monthly_qty") return "readonly";
+        // item_name and customer_name always editable
+        return "edit";
       }
     }
+
+    // Daily production entry form logic
+    if (formDefinition.name === "F-DAILY-PRODUCTION-ENTRY") {
+      if (mode === "plan") {
+        // In plan mode, hide actual fields
+        if (
+          fieldId === "h1_actual" ||
+          fieldId === "h2_actual" ||
+          fieldId === "ot_actual" ||
+          fieldId === "actual_production" ||
+          fieldId === "quality_defects" ||
+          fieldId === "defect_details" ||
+          fieldId === "responsible_person" ||
+          fieldId === "production_percentage" ||
+          fieldId === "reason" ||
+          fieldId === "rework"
+        ) {
+          return "hide";
+        }
+        return "edit";
+      } else if (mode === "report") {
+        // In report mode, plan fields are readonly, actual fields are editable
+        if (
+          fieldId === "h1_plan" ||
+          fieldId === "h2_plan" ||
+          fieldId === "ot_plan" ||
+          fieldId === "target_qty"
+        ) {
+          return "readonly";
+        }
+        return "edit";
+      }
+    }
+
     // Default logic for other forms
     if (mode === "plan") {
       if (PLAN_FIELDS.includes(fieldId)) return "edit";
@@ -192,17 +242,44 @@ const DynamicForm = ({
 
   // Helper to determine header field mode for unified production plan
   const getHeaderFieldMode = (field) => {
-    if (formDefinition.name === "Production Plan Entry") {
-      if (mode === "monthly") {
-        if (field.id === "week_number" || field.id === "week_dates")
-          return "hide";
+    console.log(
+      `Header field ${field.id} (${field.label}) - mode: ${mode}, formName: ${formDefinition.name}`
+    );
+
+    // For monthly production plans, hide week-related fields
+    if (
+      (formDefinition.name === "F-PRODUCTION-PLAN-ENTRY" ||
+        formDefinition.name === "Production Plan Entry") &&
+      mode === "monthly"
+    ) {
+      if (field.id === "week_number" || field.id === "week_dates") {
+        console.log(`✅ Hiding ${field.id} in monthly mode`);
+        return "hide";
+      }
+      console.log(`✅ Showing ${field.id} as editable in monthly mode`);
+      return "edit";
+    }
+    // For weekly production plans, show week fields as editable, others readonly
+    if (
+      (formDefinition.name === "F-PRODUCTION-PLAN-ENTRY" ||
+        formDefinition.name === "Production Plan Entry") &&
+      mode === "weekly"
+    ) {
+      if (field.id === "week_number" || field.id === "week_dates") {
+        console.log(`✅ Showing ${field.id} as editable in weekly mode`);
         return "edit";
-      } else if (mode === "weekly") {
-        if (field.id === "week_number" || field.id === "week_dates")
-          return "readonly";
-        return "readonly";
+      }
+      console.log(`✅ Showing ${field.id} as readonly in weekly mode`);
+      return "readonly";
+    }
+    // For daily production forms, hide week fields
+    if (formDefinition.name === "F-DAILY-PRODUCTION-ENTRY") {
+      if (field.id === "week_number" || field.id === "week_dates") {
+        console.log(`✅ Hiding ${field.id} in daily mode`);
+        return "hide";
       }
     }
+    console.log(`✅ Default: showing ${field.id} as editable`);
     return "edit";
   };
 
@@ -247,7 +324,9 @@ const DynamicForm = ({
       <div className="header-fields">
         {formDefinition.fields.map((field) => {
           const fieldMode = getHeaderFieldMode(field);
-          if (fieldMode === "hide") return null;
+          if (fieldMode === "hide") {
+            return null;
+          }
           return (
             <div key={field.id} className="form-group">
               <label htmlFor={field.id}>{field.label}</label>
@@ -268,7 +347,11 @@ const DynamicForm = ({
       {/* Table */}
       <div className="table-container">
         <div className="table-header">
-          <h3>Production Entries</h3>
+          <h3>
+            {formDefinition.name === "F-DAILY-PRODUCTION-ENTRY"
+              ? "Daily Production Report"
+              : "Production Entries"}
+          </h3>
           <button
             type="button"
             onClick={addTableRow}
@@ -279,15 +362,22 @@ const DynamicForm = ({
           </button>
         </div>
         <div className="table-wrapper">
-          <table className="production-table">
+          <table
+            className={`production-table ${
+              formDefinition.name === "F-DAILY-PRODUCTION-ENTRY"
+                ? "daily-production-table"
+                : ""
+            }`}
+          >
             <thead>
               <tr>
-                {formDefinition.tableFields.map(
-                  (field) =>
-                    getFieldMode(field.id) !== "hide" && (
-                      <th key={field.id}>{field.label}</th>
-                    )
-                )}
+                {formDefinition.tableFields.map((field) => {
+                  const fieldMode = getFieldMode(field.id);
+                  if (fieldMode === "hide") {
+                    return null;
+                  }
+                  return <th key={field.id}>{field.label}</th>;
+                })}
                 <th>Actions</th>
               </tr>
             </thead>
@@ -296,8 +386,11 @@ const DynamicForm = ({
                 <tr key={rowIndex}>
                   {formDefinition.tableFields.map((field) => {
                     const fieldMode = getFieldMode(field.id);
+                    if (fieldMode === "hide") {
+                      return null;
+                    }
                     if (field.id === "production_percentage") {
-                      return fieldMode !== "hide" ? (
+                      return (
                         <td key={field.id}>
                           <input
                             type="number"
@@ -306,9 +399,9 @@ const DynamicForm = ({
                             className="form-field readonly"
                           />
                         </td>
-                      ) : null;
+                      );
                     }
-                    return fieldMode !== "hide" ? (
+                    return (
                       <td key={field.id}>
                         {renderField(
                           field,
@@ -324,7 +417,7 @@ const DynamicForm = ({
                           </div>
                         )}
                       </td>
-                    ) : null;
+                    );
                   })}
                   <td>
                     <button
@@ -368,7 +461,7 @@ const DynamicForm = ({
   );
 
   return (
-    <form onSubmit={handleSubmit} className="dynamic-form">
+    <form onSubmit={handleSubmit} className="dynamic-form" key={renderKey}>
       {formDefinition.type === "table"
         ? renderTableForm()
         : renderRegularForm()}
