@@ -6,16 +6,32 @@ const {
   completeTask,
   updateTask,
   submitTaskForm,
+  getFormSubmissions,
+  getAllFormSubmissionsForUser,
+  triggerEvent,
+  exportTaskToExcel,
 } = require("../controllers/taskController");
+const { findTask } = require("../controllers/taskController");
+const { triggerDependentTasks } = require("../services/taskTriggers");
+const { readDB, writeDB } = require("../utils/dbHelper");
+const { readFormsDB } = require("../utils/formsDbHelper");
 
 router.get("/users", getUsers);
 
-router.get("/tasks", getTasks);
+router.get("/", getTasks);
 
-router.post("/tasks/:id/complete", completeTask);
+router.post("/:id/complete", completeTask);
 
-router.post("/tasks/:id/update", updateTask);
+router.post("/:id/update", updateTask);
 
-router.post("/tasks/:id/submit-form", submitTaskForm);
+router.post("/:id/submit-form", submitTaskForm);
+
+router.get("/:id/form-submissions", getFormSubmissions);
+
+router.get("/form-submissions", getAllFormSubmissionsForUser);
+
+router.post("/trigger-event", triggerEvent);
+
+router.get("/:id/export-excel", exportTaskToExcel);
 
 module.exports = router;

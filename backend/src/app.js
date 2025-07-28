@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const taskRoutes = require("./routes/taskRoutes");
+require("./jobs/recurringTasks");
 
 const app = express();
 

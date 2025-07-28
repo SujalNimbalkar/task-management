@@ -5,8 +5,10 @@ import {
   completeTask,
   updateTask,
 } from "./services/api";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import UserSelector from "./components/users/UserSelector/UserSelector";
 import TaskList from "./components/tasks/TaskList/TaskList";
+import SubmittedFormsPage from "./components/forms/SubmittedFormsPage";
 import "./App.css";
 
 function App() {
@@ -16,6 +18,8 @@ function App() {
   const [isUsersLoading, setUsersLoading] = useState(true);
   const [isTasksLoading, setTasksLoading] = useState(false);
   const [appError, setAppError] = useState(null);
+  const [activeTab, setActiveTab] = useState("monthly");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -55,66 +59,148 @@ function App() {
     loadTasks();
   }, [loadTasks]);
 
-  const handleComplete = async (taskId) => {
-    const originalTasks = [...tasks];
-
-    // Optimistically update the UI
-    const updatedTasks = tasks.map((task) =>
-      task.id === taskId ? { ...task, status: "completed" } : task
-    );
-    setTasks(updatedTasks);
-
+  const handleComplete = async (taskId, options = {}) => {
     try {
       await completeTask(taskId);
+      await loadTasks();
     } catch (err) {
       setAppError(`Failed to complete task: ${err.message}`);
       console.error(err);
-      // Revert to the original state on failure
-      setTasks(originalTasks);
     }
   };
 
   const handleUpdate = async (taskId) => {
-    const originalTasks = [...tasks];
-
-    // Optimistically update the UI
-    const updatedTasks = tasks.map((task) =>
-      task.id === taskId ? { ...task, status: "reopened" } : task
-    );
-    setTasks(updatedTasks);
-
     try {
       await updateTask(taskId);
+      await loadTasks();
     } catch (err) {
       setAppError(`Failed to update task: ${err.message}`);
       console.error(err);
-      // Revert to the original state on failure
-      setTasks(originalTasks);
     }
   };
+
+  // Filter tasks by type
+  const filterTasksByType = (taskType) => {
+    if (!tasks.length) return [];
+
+    const taskFilters = {
+      monthly: (task) => task.name.includes("Monthly Production Plan"),
+      weekly: (task) => task.name.includes("Weekly Production Plan"),
+      daily: (task) =>
+        task.name.includes("Daily Production Plan") ||
+        task.name.includes("Daily Production Report") ||
+        task.name.includes("Action Plan"),
+    };
+
+    return tasks.filter(taskFilters[taskType] || (() => true));
+  };
+
+  const monthlyTasks = filterTasksByType("monthly");
+  const weeklyTasks = filterTasksByType("weekly");
+  const dailyTasks = filterTasksByType("daily");
 
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Employee Task Dashboard</h1>
+        <h1>Production Planning Task Management</h1>
       </header>
       <main className="app-main">
-        {appError && <div className="error-message">{appError}</div>}
-        <UserSelector
-          users={users}
-          selectedUser={selectedUser}
-          onSelect={setSelectedUser}
-          isLoading={isUsersLoading}
-        />
-        {isTasksLoading ? (
-          <div className="loading">Loading tasks...</div>
-        ) : (
-          <TaskList
-            tasks={tasks}
-            onComplete={handleComplete}
-            onUpdate={handleUpdate}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                {appError && <div className="error-message">{appError}</div>}
+                <UserSelector
+                  users={users}
+                  selectedUser={selectedUser}
+                  onSelect={setSelectedUser}
+                  isLoading={isUsersLoading}
+                />
+                <button
+                  onClick={() =>
+                    navigate("/submitted-forms?userId=" + selectedUser)
+                  }
+                  disabled={!selectedUser}
+                  className="view-submissions-btn"
+                >
+                  View Submitted Forms
+                </button>
+
+                {selectedUser && !isTasksLoading && (
+                  <div className="task-tabs">
+                    <div className="tab-navigation">
+                      <button
+                        className={`tab-button ${
+                          activeTab === "monthly" ? "active" : ""
+                        }`}
+                        onClick={() => setActiveTab("monthly")}
+                      >
+                        Monthly Tasks ({monthlyTasks.length})
+                      </button>
+                      <button
+                        className={`tab-button ${
+                          activeTab === "weekly" ? "active" : ""
+                        }`}
+                        onClick={() => setActiveTab("weekly")}
+                      >
+                        Weekly Tasks ({weeklyTasks.length})
+                      </button>
+                      <button
+                        className={`tab-button ${
+                          activeTab === "daily" ? "active" : ""
+                        }`}
+                        onClick={() => setActiveTab("daily")}
+                      >
+                        Daily Tasks ({dailyTasks.length})
+                      </button>
+                    </div>
+
+                    <div className="tab-content">
+                      {activeTab === "monthly" && (
+                        <div className="tab-panel">
+                          <h2>Monthly Production Planning</h2>
+                          <TaskList
+                            tasks={monthlyTasks}
+                            onComplete={handleComplete}
+                            onUpdate={handleUpdate}
+                          />
+                        </div>
+                      )}
+
+                      {activeTab === "weekly" && (
+                        <div className="tab-panel">
+                          <h2>Weekly Production Planning</h2>
+                          <TaskList
+                            tasks={weeklyTasks}
+                            onComplete={handleComplete}
+                            onUpdate={handleUpdate}
+                          />
+                        </div>
+                      )}
+
+                      {activeTab === "daily" && (
+                        <div className="tab-panel">
+                          <h2>Daily Production Planning & Reports</h2>
+                          <TaskList
+                            tasks={dailyTasks}
+                            onComplete={handleComplete}
+                            onUpdate={handleUpdate}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {isTasksLoading && (
+                  <div className="loading">Loading tasks...</div>
+                )}
+              </>
+            }
           />
-        )}
+          <Route path="/submitted-forms" element={<SubmittedFormsPage />} />
+        </Routes>
       </main>
     </div>
   );

@@ -1,0 +1,75 @@
+.submissions-modal {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  padding: 24px;
+  margin-bottom: 24px;
+  position: relative;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.submissions-modal h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1.3rem;
+}
+
+.close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.close-btn:hover {
+  background: #e0e0e0;
+}
+
+.submissions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.submission-item {
+  border-bottom: 1px solid #eee;
+  padding: 12px 0;
+}
+
+.submission-item:last-child {
+  border-bottom: none;
+}
+
+.submission-data {
+  margin: 0;
+  background: #f8f9fa;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: "Fira Mono", "Consolas", "Monaco", monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.loading {
+  text-align: center;
+  color: #666;
+  padding: 1rem;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+} 
