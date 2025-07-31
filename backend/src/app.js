@@ -6,7 +6,6 @@ const userRoutes = require("./routes/userRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const formRoutes = require("./routes/formRoutes");
 const processRoutes = require("./routes/processRoutes");
-const testRoutes = require("./routes/testRoutes");
 // require("./jobs/recurringTasks"); // Temporarily disabled due to MongoDB migration
 
 const app = express();
@@ -25,6 +24,5 @@ app.use("/api/users", userRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/forms", formRoutes);
 app.use("/api/processes", processRoutes);
-app.use("/api/test", testRoutes);
 
 module.exports = app;

@@ -294,8 +294,32 @@ async function testMonthlyTaskCreation() {
   }
 }
 
+// Add comprehensive logging for cron job monitoring
+console.log(`[CRON] 🔧 Monthly cron job scheduled: "0 17 31 * *" (31st of each month at 17:00)`);
+console.log(`[CRON] 🔧 Daily test cron job scheduled: "0 18 * * *" (Daily at 18:00 for testing)`);
+console.log(`[CRON] 📅 Current time: ${new Date().toISOString()}`);
+console.log(`[CRON] 🌍 Timezone: ${IST_TIMEZONE}`);
+
+// Daily test cron job (for testing purposes)
+cron.schedule("0 18 * * *", async () => {
+  console.log(`[CRON-TEST] 🧪 Daily test cron job triggered at ${new Date().toISOString()}`);
+  console.log(`[CRON-TEST] 📊 This runs daily at 18:00 to verify cron is working`);
+  
+  try {
+    const now = new Date();
+    const nowIST = utcToZonedTime(now, IST_TIMEZONE);
+    console.log(`[CRON-TEST] 📅 Current IST: ${nowIST.toLocaleString("en-IN", { timeZone: IST_TIMEZONE })}`);
+    console.log(`[CRON-TEST] ✅ Daily cron job is working correctly!`);
+  } catch (error) {
+    console.error(`[CRON-TEST] ❌ Daily test cron job failed:`, error);
+  }
+});
+
 cron.schedule("0 17 31 * *", async () => {
   const startTime = Date.now();
+  console.log(`[CRON] 🚀 CRON JOB TRIGGERED at ${new Date().toISOString()}`);
+  console.log(`[CRON] 📊 Starting recurring tasks check...`);
+  
   try {
     const now = new Date();
     const nowIST = utcToZonedTime(now, IST_TIMEZONE);
@@ -308,7 +332,9 @@ cron.schedule("0 17 31 * *", async () => {
         { timeZone: IST_TIMEZONE }
       )} | Day: ${istDay} Hour: ${istHour} Min: ${istMinute}`
     );
+    console.log(`[CRON] 📖 Reading database...`);
     const db = await readDB();
+    console.log(`[CRON] 📊 Found ${db.processes?.length || 0} processes in database`);
     let changed = false;
 
     for (const process of db.processes) {
@@ -375,11 +401,14 @@ cron.schedule("0 17 31 * *", async () => {
                 task.lastUpdated
               )}`
             );
+            console.log(`[CRON] 🔍 Checking trigger conditions:`);
+            console.log(`[CRON]   - istDay (${istDay}) === 31: ${istDay === 31}`);
+            console.log(`[CRON]   - task.lastUpdated: ${task.lastUpdated}`);
+            console.log(`[CRON]   - isThisMonth(task.lastUpdated): ${isThisMonth(task.lastUpdated)}`);
+            console.log(`[CRON]   - Condition met: ${istDay === 31 && (!task.lastUpdated || !isThisMonth(task.lastUpdated))}`);
+            
             if (
               istDay === 31 &&
-              istHour === 17 &&
-              istMinute >= 0 &&
-              istMinute < 5 &&
               (!task.lastUpdated || !isThisMonth(task.lastUpdated))
             ) {
               // Create a new task for this month instead of reusing the template
@@ -493,5 +522,118 @@ cron.schedule("0 17 31 * *", async () => {
   }
 });
 
-// Export the test function
-module.exports = { testMonthlyTaskCreation };
+// Manual trigger function for testing
+async function manualTriggerCronJob() {
+  console.log(`[MANUAL] 🚀 Manually triggering cron job at ${new Date().toISOString()}`);
+  console.log(`[MANUAL] 📊 This will simulate the cron job execution...`);
+  
+  // Simulate the cron job execution
+  const startTime = Date.now();
+  try {
+    const now = new Date();
+    const nowIST = utcToZonedTime(now, IST_TIMEZONE);
+    const istHour = nowIST.getHours();
+    const istMinute = nowIST.getMinutes();
+    const istDay = nowIST.getDate();
+    
+    console.log(`[MANUAL] 📅 Current IST: ${nowIST.toLocaleString("en-IN", { timeZone: IST_TIMEZONE })}`);
+    console.log(`[MANUAL] 📊 Day: ${istDay}, Hour: ${istHour}, Minute: ${istMinute}`);
+    
+    const db = await readDB();
+    console.log(`[MANUAL] 📊 Found ${db.processes?.length || 0} processes in database`);
+    let changed = false;
+
+    for (const process of db.processes) {
+      if (!process.tasks) continue;
+      console.log(`[MANUAL] 🔍 Checking process: ${process.name || 'Unnamed'}`);
+
+      for (const task of process.tasks) {
+        if (!task.trigger || task.trigger.type !== "time") continue;
+
+        if (task.trigger.recurrence === "monthly") {
+          if (task.id === 1001 && task.trigger.dayOfMonth === "31") {
+            console.log(`[MANUAL] 🎯 Found monthly trigger task: ${task.name}`);
+            console.log(`[MANUAL] 🔍 Trigger conditions:`);
+            console.log(`[MANUAL]   - istDay (${istDay}) === 31: ${istDay === 31}`);
+            console.log(`[MANUAL]   - task.lastUpdated: ${task.lastUpdated}`);
+            console.log(`[MANUAL]   - isThisMonth(task.lastUpdated): ${isThisMonth(task.lastUpdated)}`);
+            
+            // Force trigger for testing (ignore date condition)
+            console.log(`[MANUAL] 🚀 FORCING TRIGGER for testing purposes...`);
+            
+            const newTaskId = Date.now();
+            const nextMonth = new Date(nowIST.getFullYear(), nowIST.getMonth() + 1, 1);
+            const monthName = nextMonth.toLocaleString("default", { month: "long" });
+            const year = nextMonth.getFullYear();
+            const monthStartDate = `${year}-${String(nextMonth.getMonth() + 1).padStart(2, "0")}-01`;
+
+            const newMonthlyTask = {
+              id: newTaskId,
+              name: `Monthly Production Plan - ${monthName} ${year} (MANUAL TEST)`,
+              assignedRole: task.assignedRole,
+              assignedUserId: task.assignedUserId || null,
+              status: "pending",
+              dependencies: [],
+              formId: task.formId,
+              trigger: {
+                type: "time",
+                recurrence: "monthly",
+                dayOfMonth: "31",
+              },
+              dueDateRule: {
+                type: "end_of_month_minus_days",
+                days: 3,
+              },
+              formData: {
+                month_start_date: monthStartDate,
+                rows: [],
+              },
+              lastUpdated: nowIST.toISOString(),
+              createdForMonth: `${year}-${String(nextMonth.getMonth() + 1).padStart(2, "0")}`,
+              isTemplate: false,
+              templateId: task.id,
+              isManualTest: true,
+            };
+
+            if (newMonthlyTask.dueDateRule && newMonthlyTask.dueDateRule.type === "end_of_month_minus_days") {
+              newMonthlyTask.dueDate = getDueDateEndOfMonthMinusDays(
+                nextMonth.getFullYear(),
+                nextMonth.getMonth(),
+                newMonthlyTask.dueDateRule.days
+              );
+            }
+
+            process.tasks.push(newMonthlyTask);
+            changed = true;
+
+            console.log(`[MANUAL] ✅ Created test task: ${newMonthlyTask.name} (ID: ${newTaskId})`);
+            console.log(`[MANUAL] 📅 Due date: ${newMonthlyTask.dueDate}`);
+            console.log(`[MANUAL] 👤 Assigned to role: ${newMonthlyTask.assignedRole}`);
+          }
+        }
+      }
+    }
+
+    if (changed) {
+      await writeDB(db);
+      console.log(`[MANUAL] ✅ Database updated successfully!`);
+    } else {
+      console.log(`[MANUAL] ⚠️ No changes made - no matching tasks found.`);
+    }
+    
+    const executionTime = Date.now() - startTime;
+    console.log(`[MANUAL] 🎉 Manual trigger completed in ${executionTime}ms`);
+    return { success: true, executionTime, changed };
+    
+  } catch (error) {
+    const executionTime = Date.now() - startTime;
+    console.error(`[MANUAL] ❌ Manual trigger failed (${executionTime}ms):`, error);
+    return { success: false, error: error.message, executionTime };
+  }
+}
+
+// Export functions
+module.exports = { 
+  testMonthlyTaskCreation,
+  manualTriggerCronJob
+};
