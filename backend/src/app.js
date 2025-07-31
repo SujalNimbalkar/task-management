@@ -6,7 +6,7 @@ const userRoutes = require("./routes/userRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const formRoutes = require("./routes/formRoutes");
 const processRoutes = require("./routes/processRoutes");
-// require("./jobs/recurringTasks"); // Temporarily disabled due to MongoDB migration
+require("./jobs/recurringTasks"); // Enable cron jobs
 
 const app = express();
 
