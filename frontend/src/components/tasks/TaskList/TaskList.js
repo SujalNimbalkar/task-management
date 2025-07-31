@@ -2,7 +2,7 @@ import React from "react";
 import TaskItem from "../TaskItem/TaskItem";
 import "./TaskList.css";
 
-const TaskList = ({ tasks, onTaskUpdate }) => {
+const TaskList = ({ tasks, onTaskUpdate, currentUser }) => {
   if (!tasks || tasks.length === 0) {
     return (
       <div className="task-list">
@@ -16,7 +16,12 @@ const TaskList = ({ tasks, onTaskUpdate }) => {
   return (
     <div className="task-list">
       {tasks.map((task) => (
-        <TaskItem key={task.id} task={task} onTaskUpdate={onTaskUpdate} />
+        <TaskItem
+          key={task.id}
+          task={task}
+          onTaskUpdate={onTaskUpdate}
+          currentUser={currentUser}
+        />
       ))}
     </div>
   );

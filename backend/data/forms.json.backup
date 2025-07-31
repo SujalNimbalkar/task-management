@@ -1,0 +1,290 @@
+{
+  "submissions": [
+    {
+      "id": "1753854927429",
+      "taskId": "1753780080098",
+      "formId": "F-PRODUCTION-PLAN-ENTRY",
+      "submittedAt": "2025-07-30T05:55:27.429Z",
+      "formData": {
+        "month_start_date": "2025-08-01",
+        "rows": [
+          {
+            "item_name": "CV Charger Dual USB",
+            "customer_name": "Eicher",
+            "monthly_qty": "3000",
+            "weekly_qty": ""
+          },
+          {
+            "item_name": "Micro Siren",
+            "customer_name": "SML",
+            "monthly_qty": "7000",
+            "weekly_qty": ""
+          }
+        ]
+      }
+    }
+  ],
+  "F-PRODUCTION-PLAN-ENTRY": {
+    "name": "Production Plan Entry",
+    "type": "table",
+    "fields": [
+      {
+        "id": "month_start_date",
+        "label": "Month Start Date",
+        "type": "date",
+        "required": true,
+        "isHeader": true
+      },
+      {
+        "id": "week_number",
+        "label": "Week Number",
+        "type": "number",
+        "required": false,
+        "isHeader": true,
+        "readonly": true
+      },
+      {
+        "id": "week_dates",
+        "label": "Week Dates",
+        "type": "text",
+        "required": false,
+        "isHeader": true,
+        "readonly": true
+      }
+    ],
+    "tableFields": [
+      {
+        "id": "item_name",
+        "label": "Item Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "customer_name",
+        "label": "Customer Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "monthly_qty",
+        "label": "Monthly Quantity",
+        "type": "number",
+        "required": true
+      },
+      {
+        "id": "weekly_qty",
+        "label": "Weekly Quantity",
+        "type": "number",
+        "required": false
+      }
+    ]
+  },
+  "F-DAILY-PRODUCTION-ENTRY": {
+    "name": "Daily Production Entry",
+    "type": "table",
+    "fields": [
+      {
+        "id": "date",
+        "label": "Date",
+        "type": "date",
+        "required": true,
+        "isHeader": true,
+        "readonly": false
+      }
+    ],
+    "tableFields": [
+      {
+        "id": "dept_name",
+        "label": "Dept. Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "operator_name",
+        "label": "Operator Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "work",
+        "label": "Work",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "h1_plan",
+        "label": "H1 Plan",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "h1_actual",
+        "label": "H1 Actual",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "h2_plan",
+        "label": "H2 Plan",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "h2_actual",
+        "label": "H2 Actual",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "ot_plan",
+        "label": "OT Plan",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "ot_actual",
+        "label": "OT Actual",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "quality_defects",
+        "label": "Quality Defects",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "defect_details",
+        "label": "Defect Details",
+        "type": "text",
+        "required": false
+      },
+      {
+        "id": "responsible_person",
+        "label": "Responsible Person",
+        "type": "text",
+        "required": false
+      },
+      {
+        "id": "target_qty",
+        "label": "Target Qty",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "actual_production",
+        "label": "Actual Production",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "production_percentage",
+        "label": "Production %",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "reason",
+        "label": "Reason",
+        "type": "text",
+        "required": false
+      },
+      {
+        "id": "rework",
+        "label": "Rework",
+        "type": "text",
+        "required": false
+      }
+    ]
+  },
+  "F-ACTION-PLAN": {
+    "name": "Action Plan for Low Production",
+    "type": "table",
+    "fields": [
+      {
+        "id": "date",
+        "label": "Date",
+        "type": "date",
+        "required": true,
+        "isHeader": true
+      }
+    ],
+    "tableFields": [
+      {
+        "id": "department",
+        "label": "Dept. Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "operator_name",
+        "label": "Operator Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "work_description",
+        "label": "Work Description",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "target_qty",
+        "label": "Target QTY",
+        "type": "number",
+        "required": true
+      },
+      {
+        "id": "actual_production",
+        "label": "Actual Production",
+        "type": "number",
+        "required": true
+      },
+      {
+        "id": "achievement_percentage",
+        "label": "Achievement %",
+        "type": "number",
+        "required": true,
+        "readonly": true
+      },
+      {
+        "id": "reason_for_low_production",
+        "label": "Reason for Low Production",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "corrective_actions",
+        "label": "Corrective Actions",
+        "type": "textarea",
+        "required": true
+      }
+    ]
+  }
+}d": "actual_production",
+        "label": "Actual Production",
+        "type": "number",
+        "required": true
+      },
+      {
+        "id": "achievement_percentage",
+        "label": "Achievement %",
+        "type": "number",
+        "required": true,
+        "readonly": true
+      },
+      {
+        "id": "reason_for_low_production",
+        "label": "Reason for Low Production",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "corrective_actions",
+        "label": "Corrective Actions",
+        "type": "textarea",
+        "required": true
+      }
+    ]
+  }
+}

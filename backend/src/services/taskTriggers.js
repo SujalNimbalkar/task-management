@@ -25,34 +25,31 @@ function calculateWeeksInMonth(dateStr) {
   let currentWeek = 1;
   let weekStart = 1;
 
-  // Calculate weeks based on actual calendar weeks (1-7, 8-14, 15-21, 22-28, 29-31/30)
-  for (let day = 1; day <= totalDays; day++) {
-    if (day % 7 === 1 || day === 1) {
-      // Start of a new week (every 7 days)
-      if (day > 1) {
-        weeks.push({
-          weekNumber: currentWeek,
-          startDay: weekStart,
-          endDay: day - 1,
-          days: 6, // 6 working days per week (Monday through Saturday)
-        });
-        currentWeek++;
-      }
-      weekStart = day;
-    }
-  }
+  // Calculate working weeks (Monday to Saturday, 6 days per week)
+  // Week 1: Days 1-6
+  // Week 2: Days 7-12
+  // Week 3: Days 13-18
+  // Week 4: Days 19-24
+  // Week 5: Days 25-30/31 (remaining days)
 
-  // Add the last week
-  if (weekStart <= totalDays) {
-    const remainingDays = totalDays - weekStart + 1;
+  for (let day = 1; day <= totalDays; day += 6) {
+    const weekEnd = Math.min(day + 5, totalDays); // 6 days per week, but don't exceed month end
+    const daysInWeek = weekEnd - day + 1;
+
     weeks.push({
       weekNumber: currentWeek,
-      startDay: weekStart,
-      endDay: totalDays,
-      days: Math.min(remainingDays, 6), // Cap at 6 days, but allow fewer for last week
+      startDay: day,
+      endDay: weekEnd,
+      days: daysInWeek,
     });
+
+    currentWeek++;
   }
 
+  console.log(
+    `[WEEK_CALC] Calculated ${weeks.length} weeks for ${dateStr}:`,
+    weeks
+  );
   return weeks;
 }
 
@@ -95,10 +92,12 @@ async function analyzeFormDataAndTriggerTasks(
   try {
     // Production Planning Workflow triggers
     if (process.name === "Production Planning Workflow") {
-      // Monthly Production Plan (Task 1001) - triggers weekly plans dynamically
+      // Monthly Production Plan - triggers weekly plans dynamically
       if (
-        completedTask.id === 1001 &&
-        completedTask.formId === "F-PRODUCTION-PLAN-ENTRY"
+        completedTask.name &&
+        completedTask.name.includes("Monthly Production Plan") &&
+        completedTask.formId === "F-PRODUCTION-PLAN-ENTRY" &&
+        !completedTask.isTemplate // Only trigger for non-template monthly tasks
       ) {
         // Calculate weeks based on the month from form data
         const monthStartDate = formData.month_start_date || "2025-07-01"; // Default fallback
@@ -110,7 +109,10 @@ async function analyzeFormDataAndTriggerTasks(
         );
 
         // Generate weekly task IDs dynamically
-        const weeklyTaskIds = generateWeeklyTaskIds(1002, weeks.length);
+        const weeklyTaskIds = generateWeeklyTaskIds(
+          completedTask.id + 1,
+          weeks.length
+        );
 
         // Trigger weekly tasks for each calculated week
         for (let i = 0; i < weeklyTaskIds.length; i++) {
@@ -124,18 +126,23 @@ async function analyzeFormDataAndTriggerTasks(
             // Create new weekly task dynamically
             weeklyTask = {
               id: taskId,
-              name: `Weekly Production Plan - Week ${week.weekNumber} (${week.startDay}-${week.endDay})`,
-              assignedRole: "production_manager",
+              name: `Weekly Production Plan - Week ${week.weekNumber} (${
+                week.startDay
+              }-${week.endDay}) - ${completedTask.name.split(" - ")[1] || ""}`,
+              assignedRole: "plant_head",
               status: "pending",
-              dependencies: [1001],
+              dependencies: [completedTask.id],
               formId: "F-PRODUCTION-PLAN-ENTRY",
               trigger: {
                 type: "event",
                 event: "task_completed",
-                taskId: 1001,
+                taskId: completedTask.id,
               },
               formData: null,
               lastUpdated: new Date().toISOString(),
+              createdForMonth: completedTask.createdForMonth,
+              isTemplate: false,
+              templateId: 2001,
             };
 
             // Add to process tasks
@@ -147,7 +154,11 @@ async function analyzeFormDataAndTriggerTasks(
             // Update existing task
             weeklyTask.status = "pending";
             weeklyTask.lastUpdated = new Date().toISOString();
-            weeklyTask.name = `Weekly Production Plan - Week ${week.weekNumber} (${week.startDay}-${week.endDay})`;
+            weeklyTask.name = `Weekly Production Plan - Week ${
+              week.weekNumber
+            } (${week.startDay}-${week.endDay}) - ${
+              completedTask.name.split(" - ")[1] || ""
+            }`;
             console.log(
               `[TRIGGER] Updated weekly task ${taskId} for Week ${week.weekNumber}`
             );
@@ -170,7 +181,7 @@ async function analyzeFormDataAndTriggerTasks(
             };
 
             console.log(
-              `[TRIGGER] Pre-filled weekly task ${taskId} with ${weekRows.length} items from monthly plan`
+              `[TRIGGER] Pre-filled weekly task ${taskId} (Week ${week.weekNumber}) with ${weekRows.length} items from monthly plan`
             );
           }
         }
@@ -179,7 +190,8 @@ async function analyzeFormDataAndTriggerTasks(
       // Weekly Production Plans - trigger daily plans dynamically
       if (
         completedTask.formId === "F-PRODUCTION-PLAN-ENTRY" &&
-        completedTask.name.startsWith("Weekly Production Plan - Week ")
+        completedTask.name.startsWith("Weekly Production Plan - Week ") &&
+        !completedTask.isTemplate // Only trigger for non-template weekly tasks
       ) {
         // Extract week number from task name or form data
         const weekMatch = completedTask.name.match(/Week (\d+)/);
@@ -193,23 +205,29 @@ async function analyzeFormDataAndTriggerTasks(
         // Calculate weeks for the month
         const weeks = calculateWeeksInMonth(monthStartDate);
         const weekInfo = weeks.find((w) => w.weekNumber === weekNumber);
-        const daysInWeek = weekInfo ? weekInfo.days : 5;
+        const daysInWeek = weekInfo ? weekInfo.days : 6; // Default to 6 working days
+
         // Find the max current task ID to keep IDs unique
         let maxTaskId = Math.max(...process.tasks.map((t) => t.id), 1005);
+
         // Create daily plan tasks for each day in this week
         for (let i = 0; i < daysInWeek; i++) {
           maxTaskId++;
           const dayNumber = i + 1;
+
           let dailyTask = process.tasks.find(
             (t) =>
               t.name ===
                 `Daily Production Plan - Week ${weekNumber} Day ${dayNumber}` &&
               t.dependencies.includes(completedTask.id)
           );
+
           if (!dailyTask) {
             dailyTask = {
               id: maxTaskId,
-              name: `Daily Production Plan - Week ${weekNumber} Day ${dayNumber}`,
+              name: `Daily Production Plan - Week ${weekNumber} Day ${dayNumber} - ${
+                completedTask.name.split(" - ").slice(-1)[0] || ""
+              }`,
               assignedRole: "production_manager",
               status: "pending",
               dependencies: [completedTask.id],
@@ -221,6 +239,9 @@ async function analyzeFormDataAndTriggerTasks(
               },
               formData: null,
               lastUpdated: new Date().toISOString(),
+              createdForMonth: completedTask.createdForMonth,
+              isTemplate: false,
+              templateId: 2002,
             };
             process.tasks.push(dailyTask);
             console.log(
@@ -229,7 +250,9 @@ async function analyzeFormDataAndTriggerTasks(
           } else {
             dailyTask.status = "pending";
             dailyTask.lastUpdated = new Date().toISOString();
-            dailyTask.name = `Daily Production Plan - Week ${weekNumber} Day ${dayNumber}`;
+            dailyTask.name = `Daily Production Plan - Week ${weekNumber} Day ${dayNumber} - ${
+              completedTask.name.split(" - ").slice(-1)[0] || ""
+            }`;
             console.log(
               `[TRIGGER] Updated daily task ${dailyTask.id} for Week ${weekNumber} Day ${dayNumber}`
             );
@@ -240,7 +263,8 @@ async function analyzeFormDataAndTriggerTasks(
       // Daily Production Plans - trigger daily production reports
       if (
         completedTask.formId === "F-DAILY-PRODUCTION-ENTRY" &&
-        completedTask.name.includes("Plan")
+        completedTask.name.includes("Plan") &&
+        !completedTask.isTemplate // Only trigger for non-template daily tasks
       ) {
         // Extract week and day number from task name
         const nameMatch = completedTask.name.match(/Week (\d+) Day (\d+)/);
@@ -288,7 +312,9 @@ async function analyzeFormDataAndTriggerTasks(
             }
             reportTask = {
               id: maxTaskId,
-              name: `Daily Production Report - Week ${weekNumber} Day ${dayNumber}`,
+              name: `Daily Production Report - Week ${weekNumber} Day ${dayNumber} - ${
+                completedTask.name.split(" - ").slice(-1)[0] || ""
+              }`,
               assignedRole: "production_manager",
               status: "pending",
               dependencies: [completedTask.id],
@@ -303,6 +329,9 @@ async function analyzeFormDataAndTriggerTasks(
                 rows: prefilledRows,
               },
               lastUpdated: new Date().toISOString(),
+              createdForMonth: completedTask.createdForMonth,
+              isTemplate: false,
+              templateId: null, // Reports don't have templates
             };
             process.tasks.push(reportTask);
             console.log(
@@ -311,7 +340,9 @@ async function analyzeFormDataAndTriggerTasks(
           } else {
             reportTask.status = "pending";
             reportTask.lastUpdated = new Date().toISOString();
-            reportTask.name = `Daily Production Report - Week ${weekNumber} Day ${dayNumber}`;
+            reportTask.name = `Daily Production Report - Week ${weekNumber} Day ${dayNumber} - ${
+              completedTask.name.split(" - ").slice(-1)[0] || ""
+            }`;
             // Only pre-fill if not already filled
             if (
               !reportTask.formData ||

@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Shashank Bajaj",
+    "email": "sb@blackcat.in",
+    "phone": "+91-9876543210",
+    "employeeId": "EMP001",
+    "department": "Director",
+    "designation": "System Administrator",
+    "roles": [
+      "admin"
+    ],
+    "isActive": true,
+    "joinDate": "2020-01-15",
+    "lastLogin": "2025-01-28T10:30:00.000Z"
+  },
+  {
+    "id": 3,
+    "name": "Sujal Nimbalkar",
+    "email": "sujalnimbalkar09@gmail.com",
+    "phone": "+91-9876543210",
+    "employeeId": "EMP003",
+    "department": "CTO",
+    "designation": "System Administrator",
+    "roles": [
+      "admin"
+    ],
+    "isActive": true,
+    "joinDate": "2020-01-15",
+    "lastLogin": "2025-01-28T10:30:00.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Amit Kumar Parida",
+    "email": "qc6@blackcat.in",
+    "phone": "+91-9876543211",
+    "employeeId": "EMP002",
+    "department": "Production",
+    "designation": "Production Manager",
+    "roles": [
+      "production_manager"
+    ],
+    "isActive": true,
+    "joinDate": "2021-03-20",
+    "lastLogin": "2025-01-28T09:15:00.000Z"
+  },
+  {
+    "id": 4,
+    "name": "Narendra Chauhan",
+    "email": "narendra@blackcat.in",
+    "phone": "+91-9876543213",
+    "employeeId": "EMP004",
+    "department": "Production",
+    "designation": "Plant Head",
+    "roles": [
+      "plant_head"
+    ],
+    "isActive": true,
+    "joinDate": "2019-11-05",
+    "lastLogin": "2025-01-28T11:20:00.000Z"
+  }
+]

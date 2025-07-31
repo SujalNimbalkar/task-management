@@ -15,7 +15,7 @@ const UserSelector = ({ users, selectedUser, onSelect }) => {
           <option value="">Choose a user...</option>
           {users.map((user) => (
             <option key={user.id} value={user.id}>
-              {user.name} ({user.roles.join(", ")})
+              {user.name} - {user.employeeId} ({user.department})
             </option>
           ))}
         </select>
@@ -23,13 +23,50 @@ const UserSelector = ({ users, selectedUser, onSelect }) => {
       </div>
       {selectedUser && (
         <div className="selected-user-info">
-          {users
-            .find((u) => u.id === parseInt(selectedUser, 10))
-            ?.roles.map((role) => (
-              <span key={role} className="role-badge">
-                {role}
-              </span>
-            ))}
+          {(() => {
+            const user = users.find((u) => u.id === parseInt(selectedUser, 10));
+            if (!user) return null;
+
+            return (
+              <div className="user-details">
+                <div className="user-basic-info">
+                  <h4>{user.name}</h4>
+                  <p>
+                    <strong>Employee ID:</strong> {user.employeeId}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {user.email}
+                  </p>
+                  <p>
+                    <strong>Department:</strong> {user.department}
+                  </p>
+                  <p>
+                    <strong>Designation:</strong> {user.designation}
+                  </p>
+                  <p>
+                    <strong>Phone:</strong> {user.phone}
+                  </p>
+                </div>
+                <div className="user-roles">
+                  <strong>Roles:</strong>
+                  {user.roles.map((role) => (
+                    <span key={role} className="role-badge">
+                      {role}
+                    </span>
+                  ))}
+                </div>
+                <div className="user-status">
+                  <span
+                    className={`status-badge ${
+                      user.isActive ? "active" : "inactive"
+                    }`}
+                  >
+                    {user.isActive ? "Active" : "Inactive"}
+                  </span>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       )}
     </div>

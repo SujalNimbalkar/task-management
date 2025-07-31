@@ -91,3 +91,105 @@ export async function fetchAllFormSubmissions(userId) {
   const url = `${API_BASE_URL}/form-submissions?userId=${userId}`;
   return fetchWithFallback(url);
 }
+
+export async function approveDailyTask(taskId) {
+  const url = `${API_BASE_URL}${BASE_TASKS_PATH}/${taskId}/approve`;
+  return fetchWithFallback(url, { method: "POST" });
+}
+
+export async function rejectDailyTask(taskId) {
+  const url = `${API_BASE_URL}${BASE_TASKS_PATH}/${taskId}/reject`;
+  return fetchWithFallback(url, { method: "POST" });
+}
+
+export async function reassignDailyTask(taskId, newManagerId) {
+  const url = `${API_BASE_URL}${BASE_TASKS_PATH}/${taskId}/reassign`;
+  return fetchWithFallback(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ newManagerId }),
+  });
+}
+
+export async function exportTaskToPDF(taskId) {
+  const url = `${API_BASE_URL}${BASE_TASKS_PATH}/${taskId}/export-pdf`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("PDF export failed");
+  }
+
+  const blob = await response.blob();
+  const url2 = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url2;
+  a.download = `task_${taskId}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url2);
+  document.body.removeChild(a);
+}
+
+// New functions for user assignment and management
+export async function assignTaskToUser(taskId, userId) {
+  const url = `${API_BASE_URL}${BASE_TASKS_PATH}/${taskId}/assign-user`;
+  return fetchWithFallback(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ userId }),
+  });
+}
+
+export async function getAvailableUsersForRole(role) {
+  const url = `${API_BASE_URL}${BASE_TASKS_PATH}/available-users/${role}`;
+  return fetchWithFallback(url);
+}
+
+export async function createUser(userData) {
+  const url = `${API_BASE_URL}/users`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  });
+  return handleResponse(response);
+}
+
+export async function updateUser(userId, userData) {
+  const url = `${API_BASE_URL}/users/${userId}`;
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  });
+  return handleResponse(response);
+}
+
+export async function deleteUser(userId) {
+  const url = `${API_BASE_URL}/users/${userId}`;
+  const response = await fetch(url, {
+    method: "DELETE",
+  });
+  return handleResponse(response);
+}
+
+export async function getUsersByRole(role) {
+  const url = `${API_BASE_URL}/users/role/${role}`;
+  return fetchWithFallback(url);
+}
+
+export async function deleteTask(taskId) {
+  const url = `${API_BASE_URL}${BASE_TASKS_PATH}/${taskId}`;
+  return fetchWithFallback(url, { method: "DELETE" });
+}

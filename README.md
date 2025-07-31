@@ -1,148 +1,223 @@
-# Production Planning Task Management System
+# RBAC Task Management System
 
-A task management system similar to Asana, specifically designed for production planning workflows with automated task triggers and dependencies.
+A comprehensive Role-Based Access Control (RBAC) task management system with dynamic forms, task triggers, and production planning capabilities.
 
-## System Overview
+## 🚀 Features
 
-This system implements a comprehensive production planning workflow that automatically creates and manages tasks based on time-based triggers and form submissions. The workflow follows this pattern:
+- **Dynamic Form System** - Create and manage custom forms with table layouts
+- **Task Triggers** - Automated task creation with time-based and event-based triggers
+- **Production Planning** - Daily, weekly, and monthly production planning and reporting
+- **Role-Based Access** - User management with role-based permissions
+- **MongoDB Integration** - Scalable database with MongoDB Atlas support
+- **Render Deployment Ready** - Complete deployment configuration for cloud hosting
 
-### Workflow Structure
+## 📁 Project Structure
 
-1. **Monthly Production Plan** (Triggered 3 days before end of month)
+```
+RBAC2/
+├── backend/                 # Node.js/Express backend
+│   ├── src/                # Source code
+│   │   ├── controllers/    # API controllers
+│   │   ├── models/         # MongoDB models
+│   │   ├── routes/         # API routes
+│   │   ├── services/       # Business logic
+│   │   └── utils/          # Utility functions
+│   ├── clear-task-data.js  # Data clearing utility
+│   ├── render.yaml         # Render deployment config
+│   └── package.json        # Backend dependencies
+├── frontend/               # React frontend
+│   ├── src/                # Source code
+│   │   ├── components/     # React components
+│   │   ├── contexts/       # React contexts
+│   │   ├── services/       # API services
+│   │   └── utils/          # Utility functions
+│   └── package.json        # Frontend dependencies
+└── README.md               # This file
+```
 
-   - Form: Item Code, Item Name, Total Quantity
-   - Assigned to: Production Manager
+## 🛠️ Quick Start
 
-2. **Weekly Production Plans** (Triggered when monthly plan is completed)
+### Prerequisites
 
-   - 4 weekly plans are created automatically
-   - Form: Week Number, Item Code, Item Name, Weekly Quantity
-   - Assigned to: Production Manager
+- Node.js (v16 or higher)
+- MongoDB Atlas account (for production)
+- Git
 
-3. **Daily Production Plans** (Triggered when weekly plan is completed)
+### Local Development
 
-   - 5 daily plans per week (Monday-Friday)
-   - Form: Date, Day of Week, Item Code, Item Name, Daily Quantity
-   - Assigned to: Production Manager
-
-4. **Daily Production Reports** (Triggered when daily plan is completed)
-
-   - Form: Date, Department, Operator, Operation, Item Code, Item Name, Target Quantity, Actual Production
-   - Assigned to: Department Operator
-
-5. **Action Plans** (Triggered when production is below 85%)
-   - Automatically triggered when actual production is less than 85% of target
-   - Form: Date, Item Code, Item Name, Target Quantity, Actual Production, Achievement Percentage, Reason for Low Production, Corrective Actions, Target Completion Date
-   - Assigned to: Production Manager
-
-## Features
-
-- **Automated Task Triggers**: Tasks are automatically created based on time schedules and form submissions
-- **Conditional Logic**: Action plans are only triggered when production targets are not met
-- **Form Management**: Dynamic forms with validation and data collection
-- **Role-Based Access**: Different tasks assigned to different user roles
-- **Dependency Management**: Tasks are properly sequenced with dependencies
-- **Real-time Updates**: Task status updates in real-time
-
-## User Roles
-
-1. **Admin**: System administration
-2. **Production Manager**: Manages production planning and action plans
-3. **Department Operator**: Reports daily production data
-
-## Technical Implementation
-
-### Backend
-
-- **Node.js/Express**: RESTful API
-- **JSON Database**: Simple file-based storage
-- **Cron Jobs**: Automated task scheduling
-- **Form Validation**: Dynamic form validation
-- **Task Triggers**: Event-driven task creation
-
-### Frontend
-
-- **React**: Modern UI framework
-- **Dynamic Forms**: Auto-generated forms based on JSON schema
-- **Real-time Updates**: Live task status updates
-- **Responsive Design**: Works on desktop and mobile
-
-## API Endpoints
-
-- `GET /api/users` - Get all users
-- `GET /api/tasks` - Get tasks for a user
-- `POST /api/tasks/:id/complete` - Complete a task
-- `POST /api/tasks/:id/update` - Update task status
-- `POST /api/tasks/:id/submit-form` - Submit form data
-- `GET /api/tasks/:id/form-submissions` - Get form submissions for a task
-- `GET /api/tasks/form-submissions` - Get all form submissions for a user
-
-## Getting Started
-
-1. **Install Dependencies**
+1. **Clone the repository**
 
    ```bash
-   # Backend
-   cd backend
-   npm install
-
-   # Frontend
-   cd frontend
-   npm install
+   git clone <your-repo-url>
+   cd RBAC2
    ```
 
-2. **Start the Backend**
+2. **Backend Setup**
 
    ```bash
    cd backend
+   npm install
+   cp env.example .env
+   # Edit .env with your MongoDB URI
    npm start
    ```
 
-3. **Start the Frontend**
+3. **Frontend Setup**
 
    ```bash
    cd frontend
+   npm install
    npm start
    ```
 
-4. **Access the Application**
+4. **Access the application**
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:4000
 
-## Workflow Example
+## 🚀 Deployment
 
-1. **Month End**: System automatically creates "Monthly Production Plan" task
-2. **Production Manager**: Fills out monthly plan with item details and quantities
-3. **System**: Automatically creates 4 weekly production plan tasks
-4. **Production Manager**: Completes weekly plans, dividing monthly quantities
-5. **System**: Creates daily production plan tasks for each week
-6. **Production Manager**: Completes daily plans with day-specific quantities
-7. **System**: Creates daily production report tasks for operators
-8. **Department Operator**: Reports actual production data
-9. **System**: If production < 85%, automatically creates action plan task
-10. **Production Manager**: Creates corrective action plan
+### Render Deployment (Recommended)
 
-## Configuration
+1. **Set up MongoDB Atlas**
 
-The system is configured through JSON files:
+   - Create a free cluster at [MongoDB Atlas](https://www.mongodb.com/atlas)
+   - Get your connection string
+   - Configure database access and network settings
 
-- `backend/data/db.json`: Users, forms, and task definitions
-- `backend/data/forms.json`: Form submission data
+2. **Deploy to Render**
 
-## Customization
+   - Connect your GitHub repository to [Render](https://render.com)
+   - Create a new Web Service
+   - Use the provided `render.yaml` configuration
+   - Set environment variables in Render dashboard
 
-To add new workflows or modify existing ones:
+3. **Environment Variables**
+   ```
+   NODE_ENV=production
+   USE_MONGODB=true
+   PORT=10000
+   CORS_ORIGIN=https://your-frontend-app.onrender.com
+   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/rbac_system?retryWrites=true&w=majority
+   ```
 
-1. Update the forms in `db.json`
-2. Add new tasks with appropriate triggers and dependencies
-3. Update the trigger logic in `taskTriggers.js`
-4. Modify the recurring tasks job if needed
+### Testing After Deployment
 
-## Monitoring
+Run the test script to verify task triggers:
 
-The system includes:
+```bash
+cd backend
+BACKEND_URL=https://your-backend-url.onrender.com node test-triggers-after-deployment.js
+```
 
-- Console logging for task triggers
-- Form submission tracking
-- Task completion history
-- Performance monitoring through achievement percentages
+## 📋 Key Features
+
+### Task Management
+
+- **Dynamic Forms** - Create custom forms with table layouts
+- **Task Triggers** - Automated task creation (daily, weekly, monthly)
+- **Status Tracking** - Track task completion and form submissions
+- **Role-Based Access** - Assign tasks based on user roles
+
+### Production Planning
+
+- **Daily Production Reports** - Track daily production metrics
+- **Weekly Production Plans** - Plan weekly production targets
+- **Monthly Production Plans** - Long-term production planning
+- **Quality Control** - Track defects and quality metrics
+
+### Form System
+
+- **Dynamic Fields** - Create forms with various field types
+- **Table Layouts** - Support for complex table-based forms
+- **Validation** - Built-in form validation
+- **Mode Support** - Plan and report modes for different use cases
+
+## 🔧 API Endpoints
+
+### Processes
+
+- `GET /api/processes` - List all processes
+- `POST /api/processes` - Create a new process
+- `PUT /api/processes/:id` - Update a process
+- `DELETE /api/processes/:id` - Delete a process
+
+### Tasks
+
+- `GET /api/tasks` - List all tasks
+- `POST /api/tasks/:id/submit` - Submit form data for a task
+- `PUT /api/tasks/:id/status` - Update task status
+
+### Forms
+
+- `GET /api/forms` - List all form definitions
+- `POST /api/forms` - Create a new form definition
+- `GET /api/forms/:id/submissions` - Get form submissions
+
+### Users
+
+- `GET /api/users` - List all users
+- `POST /api/users` - Create a new user
+- `PUT /api/users/:id` - Update user information
+
+## 🗄️ Database Schema
+
+### Process Model
+
+- Process metadata (name, description, category)
+- Array of tasks with triggers and due dates
+- User assignments and status tracking
+
+### Task Model
+
+- Task information (name, description, assigned role)
+- Trigger configuration (time-based, event-based)
+- Form data and submission status
+- Due date rules and completion tracking
+
+### Form Model
+
+- Form definitions with field configurations
+- Dynamic field types (text, number, date, select)
+- Table layout support for complex forms
+
+## 🔒 Security
+
+- **Environment Variables** - All sensitive data stored in environment variables
+- **CORS Configuration** - Proper CORS setup for production
+- **Input Validation** - Comprehensive form and API input validation
+- **Role-Based Access** - User permissions based on roles
+
+## 📚 Documentation
+
+- [Render Deployment Guide](RENDER_DEPLOYMENT_GUIDE.md) - Complete deployment instructions
+- [Deployment Summary](DEPLOYMENT_SUMMARY.md) - Quick deployment reference
+- [MongoDB Setup](backend/MONGODB_SETUP.md) - Database setup instructions
+- [Firebase Setup](frontend/FIREBASE_SETUP.md) - Authentication setup
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the ISC License.
+
+## 🆘 Support
+
+For issues and questions:
+
+1. Check the documentation files
+2. Review the deployment guides
+3. Check the test scripts for examples
+4. Monitor Render logs for deployment issues
+
+---
+
+**Status**: ✅ Ready for production deployment
+**Database**: ✅ MongoDB Atlas ready
+**Deployment**: ✅ Render configuration complete
+**Testing**: ✅ Comprehensive test scripts available

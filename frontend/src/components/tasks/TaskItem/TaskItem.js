@@ -1,12 +1,40 @@
 import React, { useState } from "react";
-import { completeTask } from "../../../services/api";
+import {
+  completeTask,
+  approveDailyTask,
+  rejectDailyTask,
+  reassignDailyTask,
+  exportTaskToPDF,
+  deleteTask,
+} from "../../../services/api";
 import DynamicForm from "../../forms/DynamicForm/DynamicForm";
+import { isTaskTemplate } from "../../../utils/taskCategories";
 import "./TaskItem.css";
 
-const TaskItem = ({ task, onTaskUpdate }) => {
+const TaskItem = ({ task, onTaskUpdate, currentUser }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const isPlantHead =
+    currentUser &&
+    currentUser.roles &&
+    currentUser.roles.includes("plant_head");
+  const isDailyTask = task.name && task.name.includes("Daily Production Plan");
+  const canAct =
+    isPlantHead &&
+    isDailyTask &&
+    (task.status === "in_process" || task.status === "pending");
+
+  // Check if task is a template (should not be deleted)
+  const isTemplate = isTaskTemplate(task);
+
+  // Check if user can delete tasks (admin or plant_head)
+  const canDelete =
+    currentUser &&
+    (currentUser.roles.includes("admin") ||
+      currentUser.roles.includes("plant_head"));
 
   const handleComplete = async () => {
     if (isSubmitting) return;
@@ -36,6 +64,47 @@ const TaskItem = ({ task, onTaskUpdate }) => {
       alert("Failed to complete task. Please try again.");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleApprove = async () => {
+    await approveDailyTask(task.id);
+    onTaskUpdate();
+  };
+  const handleReject = async () => {
+    await rejectDailyTask(task.id);
+    onTaskUpdate();
+  };
+  const handleReassign = async () => {
+    // Reassign to the same Production Manager (no new manager needed)
+    await reassignDailyTask(task.id, null);
+    onTaskUpdate();
+  };
+
+  const handleDelete = async () => {
+    if (isDeleting) return;
+
+    // Confirm deletion
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete the task "${task.name}"? This action cannot be undone.`
+    );
+
+    if (!confirmDelete) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteTask(task.id);
+      onTaskUpdate();
+      alert("Task deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting task:", error);
+      if (error.error) {
+        alert(`Failed to delete task: ${error.error}`);
+      } else {
+        alert("Failed to delete task. Please try again.");
+      }
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -69,6 +138,15 @@ const TaskItem = ({ task, onTaskUpdate }) => {
     } catch (error) {
       console.error("Error exporting to Excel:", error);
       alert("Failed to export to Excel. Please try again.");
+    }
+  };
+
+  const handleExportPDF = async () => {
+    try {
+      await exportTaskToPDF(task.id);
+    } catch (error) {
+      console.error("Error exporting to PDF:", error);
+      alert("Failed to export to PDF. Please try again.");
     }
   };
 
@@ -160,11 +238,39 @@ const TaskItem = ({ task, onTaskUpdate }) => {
           </button>
 
           <button
+            className="export-btn"
+            onClick={handleExportPDF}
+            disabled={!task.formData}
+          >
+            Export PDF
+          </button>
+
+          <button
             className="expand-btn"
             onClick={() => setIsExpanded(!isExpanded)}
           >
             {isExpanded ? "Hide Details" : "Show Details"}
           </button>
+
+          {/* Delete button - only show for non-template tasks and users with delete permissions */}
+          {canDelete && !isTemplate && (
+            <button
+              className="delete-btn"
+              onClick={handleDelete}
+              disabled={isDeleting}
+              title="Delete Task"
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </button>
+          )}
+
+          {canAct && (
+            <div className="plant-head-actions">
+              <button onClick={handleApprove}>Approve</button>
+              <button onClick={handleReject}>Reject</button>
+              <button onClick={handleReassign}>Reassign</button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -179,6 +285,30 @@ const TaskItem = ({ task, onTaskUpdate }) => {
               <span className="task-info-label">Assigned Role</span>
               <span className="task-info-value">{task.assignedRole}</span>
             </div>
+            {task.assignedUser && (
+              <div className="task-info-item">
+                <span className="task-info-label">Assigned User</span>
+                <span className="task-info-value">
+                  {task.assignedUser.name} ({task.assignedUser.employeeId})
+                </span>
+              </div>
+            )}
+            {task.assignedUser && (
+              <div className="task-info-item">
+                <span className="task-info-label">Department</span>
+                <span className="task-info-value">
+                  {task.assignedUser.department}
+                </span>
+              </div>
+            )}
+            {task.assignedUser && (
+              <div className="task-info-item">
+                <span className="task-info-label">Designation</span>
+                <span className="task-info-value">
+                  {task.assignedUser.designation}
+                </span>
+              </div>
+            )}
             <div className="task-info-item">
               <span className="task-info-label">Created</span>
               <span className="task-info-value">
@@ -216,7 +346,14 @@ const TaskItem = ({ task, onTaskUpdate }) => {
                   const { submitTaskForm } = await import(
                     "../../../services/api"
                   );
-                  await submitTaskForm(task.id, formData);
+
+                  // Add submittedBy field for MongoDB
+                  const submissionData = {
+                    ...formData,
+                    submittedBy: currentUser?.id || "688b05ff8be0df0fdc385cb5",
+                  };
+
+                  await submitTaskForm(task.id, submissionData);
                   onTaskUpdate();
                   const taskType = task.name.includes("Monthly")
                     ? "Monthly"

@@ -46,8 +46,12 @@ const DynamicForm = ({
       const headerData = {};
       if (initialData) {
         formDefinition.fields.forEach((field) => {
-          if (field.isHeader && initialData[field.id] !== undefined) {
-            headerData[field.id] = initialData[field.id];
+          if (
+            field.isHeader &&
+            initialData[field.name || field.id] !== undefined
+          ) {
+            headerData[field.name || field.id] =
+              initialData[field.name || field.id];
           }
         });
         if (initialData.rows && Array.isArray(initialData.rows)) {
@@ -67,7 +71,8 @@ const DynamicForm = ({
   const createEmptyRow = () => {
     const emptyRow = {};
     formDefinition.tableFields.forEach((field) => {
-      emptyRow[field.id] = "";
+      // Use field.name instead of field.id to match backend expectations
+      emptyRow[field.name] = "";
     });
     return emptyRow;
   };
@@ -100,21 +105,26 @@ const DynamicForm = ({
     return null;
   };
 
-  const handleHeaderChange = (fieldId, value) => {
-    const newFormData = { ...formData, [fieldId]: value };
+  const handleHeaderChange = (fieldName, value) => {
+    const field = formDefinition.fields.find(
+      (f) => f.name === fieldName || f.id === fieldName
+    );
+    const newFormData = { ...formData, [fieldName]: value };
     setFormData(newFormData);
-    const field = formDefinition.fields.find((f) => f.id === fieldId);
     const error = validateField(field, value);
-    setErrors((prev) => ({ ...prev, [fieldId]: error }));
+    setErrors((prev) => ({ ...prev, [fieldName]: error }));
   };
 
-  const handleTableRowChange = (rowIndex, fieldId, value) => {
+  const handleTableRowChange = (rowIndex, fieldName, value) => {
     const newTableRows = [...tableRows];
-    newTableRows[rowIndex] = { ...newTableRows[rowIndex], [fieldId]: value };
+    // fieldName is already the correct field name from the onChange handler
+    newTableRows[rowIndex] = { ...newTableRows[rowIndex], [fieldName]: value };
     setTableRows(newTableRows);
-    const field = formDefinition.tableFields.find((f) => f.id === fieldId);
+    const field = formDefinition.tableFields.find(
+      (f) => f.name === fieldName || f.id === fieldName
+    );
     const error = validateField(field, value);
-    setErrors((prev) => ({ ...prev, [`row_${rowIndex}_${fieldId}`]: error }));
+    setErrors((prev) => ({ ...prev, [`row_${rowIndex}_${fieldName}`]: error }));
   };
 
   const addTableRow = () => {
@@ -148,16 +158,16 @@ const DynamicForm = ({
     e.preventDefault();
     const newErrors = {};
     formDefinition.fields.forEach((field) => {
-      const error = validateField(field, formData[field.id]);
+      const error = validateField(field, formData[field.name || field.id]);
       if (error) {
-        newErrors[field.id] = error;
+        newErrors[field.name || field.id] = error;
       }
     });
     tableRows.forEach((row, rowIndex) => {
       formDefinition.tableFields.forEach((field) => {
-        const error = validateField(field, row[field.id]);
+        const error = validateField(field, row[field.name || field.id]);
         if (error) {
-          newErrors[`row_${rowIndex}_${field.id}`] = error;
+          newErrors[`row_${rowIndex}_${field.name || field.id}`] = error;
         }
       });
     });
@@ -176,19 +186,25 @@ const DynamicForm = ({
 
   // Determine which fields to show/edit
   const getFieldMode = (fieldId) => {
+    // Get the field to determine the correct field name
+    const field = formDefinition.tableFields.find(
+      (f) => f.id === fieldId || f.name === fieldId
+    );
+    const fieldName = field ? field.name : fieldId;
+
     // Unified production plan entry form logic
     if (
       formDefinition.name === "F-PRODUCTION-PLAN-ENTRY" ||
       formDefinition.name === "Production Plan Entry"
     ) {
       if (mode === "monthly") {
-        if (fieldId === "weekly_qty") return "hide";
-        if (fieldId === "monthly_qty") return "edit";
+        if (fieldName === "weekly_qty" || fieldName === "weekly_quantity") return "hide";
+        if (fieldName === "monthly_qty" || fieldName === "monthly_quantity") return "edit";
         // item_name and customer_name always editable
         return "edit";
       } else if (mode === "weekly") {
-        if (fieldId === "weekly_qty") return "edit";
-        if (fieldId === "monthly_qty") return "readonly";
+        if (fieldName === "weekly_qty" || fieldName === "weekly_quantity") return "edit";
+        if (fieldName === "monthly_qty" || fieldName === "monthly_quantity") return "readonly";
         // item_name and customer_name always editable
         return "edit";
       }
@@ -199,16 +215,16 @@ const DynamicForm = ({
       if (mode === "plan") {
         // In plan mode, hide actual fields
         if (
-          fieldId === "h1_actual" ||
-          fieldId === "h2_actual" ||
-          fieldId === "ot_actual" ||
-          fieldId === "actual_production" ||
-          fieldId === "quality_defects" ||
-          fieldId === "defect_details" ||
-          fieldId === "responsible_person" ||
-          fieldId === "production_percentage" ||
-          fieldId === "reason" ||
-          fieldId === "rework"
+          fieldName === "h1_actual" ||
+          fieldName === "h2_actual" ||
+          fieldName === "ot_actual" ||
+          fieldName === "actual_production" ||
+          fieldName === "quality_defects" ||
+          fieldName === "defect_details" ||
+          fieldName === "responsible_person" ||
+          fieldName === "production_" ||
+          fieldName === "reason" ||
+          fieldName === "rework"
         ) {
           return "hide";
         }
@@ -216,10 +232,10 @@ const DynamicForm = ({
       } else if (mode === "report") {
         // In report mode, plan fields are readonly, actual fields are editable
         if (
-          fieldId === "h1_plan" ||
-          fieldId === "h2_plan" ||
-          fieldId === "ot_plan" ||
-          fieldId === "target_qty"
+          fieldName === "h1_plan" ||
+          fieldName === "h2_plan" ||
+          fieldName === "ot_plan" ||
+          fieldName === "target_qty"
         ) {
           return "readonly";
         }
@@ -229,12 +245,12 @@ const DynamicForm = ({
 
     // Default logic for other forms
     if (mode === "plan") {
-      if (PLAN_FIELDS.includes(fieldId)) return "edit";
-      if (REPORT_FIELDS.includes(fieldId)) return "hide";
+      if (PLAN_FIELDS.includes(fieldName)) return "edit";
+      if (REPORT_FIELDS.includes(fieldName)) return "hide";
       return "edit";
     } else if (mode === "report") {
-      if (PLAN_FIELDS.includes(fieldId)) return "readonly";
-      if (REPORT_FIELDS.includes(fieldId)) return "edit";
+      if (PLAN_FIELDS.includes(fieldName)) return "readonly";
+      if (REPORT_FIELDS.includes(fieldName)) return "edit";
       return "readonly";
     }
     return "edit";
@@ -252,11 +268,12 @@ const DynamicForm = ({
         formDefinition.name === "Production Plan Entry") &&
       mode === "monthly"
     ) {
-      if (field.id === "week_number" || field.id === "week_dates") {
-        console.log(`✅ Hiding ${field.id} in monthly mode`);
+      if (field.id === "week_number" || field.id === "week_dates" || 
+          field.name === "week_number" || field.name === "week_dates") {
+        console.log(`✅ Hiding ${field.id || field.name} in monthly mode`);
         return "hide";
       }
-      console.log(`✅ Showing ${field.id} as editable in monthly mode`);
+      console.log(`✅ Showing ${field.id || field.name} as editable in monthly mode`);
       return "edit";
     }
     // For weekly production plans, show week fields as editable, others readonly
@@ -265,17 +282,19 @@ const DynamicForm = ({
         formDefinition.name === "Production Plan Entry") &&
       mode === "weekly"
     ) {
-      if (field.id === "week_number" || field.id === "week_dates") {
-        console.log(`✅ Showing ${field.id} as editable in weekly mode`);
+      if (field.id === "week_number" || field.id === "week_dates" ||
+          field.name === "week_number" || field.name === "week_dates") {
+        console.log(`✅ Showing ${field.id || field.name} as editable in weekly mode`);
         return "edit";
       }
-      console.log(`✅ Showing ${field.id} as readonly in weekly mode`);
+      console.log(`✅ Showing ${field.id || field.name} as readonly in weekly mode`);
       return "readonly";
     }
     // For daily production forms, hide week fields
     if (formDefinition.name === "F-DAILY-PRODUCTION-ENTRY") {
-      if (field.id === "week_number" || field.id === "week_dates") {
-        console.log(`✅ Hiding ${field.id} in daily mode`);
+      if (field.id === "week_number" || field.id === "week_dates" ||
+          field.name === "week_number" || field.name === "week_dates") {
+        console.log(`✅ Hiding ${field.id || field.name} in daily mode`);
         return "hide";
       }
     }
@@ -287,9 +306,9 @@ const DynamicForm = ({
     if (fieldMode === "hide") return null;
     const commonProps = {
       id: field.id,
-      name: field.id,
+      name: field.name || field.id, // Use field.name for proper form handling
       value: value || "",
-      onChange: (e) => onChange(field.id, e.target.value),
+      onChange: (e) => onChange(field.name || field.id, e.target.value),
       disabled: disabled || field.readonly || fieldMode === "readonly",
       className: `form-field ${errors[errorKey] ? "error" : ""} ${
         fieldMode === "readonly" ? "readonly" : ""
@@ -332,13 +351,15 @@ const DynamicForm = ({
               <label htmlFor={field.id}>{field.label}</label>
               {renderField(
                 field,
-                formData[field.id],
+                formData[field.name || field.id],
                 handleHeaderChange,
-                field.id,
+                field.name || field.id,
                 fieldMode
               )}
-              {errors[field.id] && (
-                <span className="error-message">{errors[field.id]}</span>
+              {errors[field.name || field.id] && (
+                <span className="error-message">
+                  {errors[field.name || field.id]}
+                </span>
               )}
             </div>
           );
@@ -372,7 +393,7 @@ const DynamicForm = ({
             <thead>
               <tr>
                 {formDefinition.tableFields.map((field) => {
-                  const fieldMode = getFieldMode(field.id);
+                  const fieldMode = getFieldMode(field.name || field.id);
                   if (fieldMode === "hide") {
                     return null;
                   }
@@ -385,11 +406,11 @@ const DynamicForm = ({
               {tableRows.map((row, rowIndex) => (
                 <tr key={rowIndex}>
                   {formDefinition.tableFields.map((field) => {
-                    const fieldMode = getFieldMode(field.id);
+                    const fieldMode = getFieldMode(field.name || field.id);
                     if (fieldMode === "hide") {
                       return null;
                     }
-                    if (field.id === "production_percentage") {
+                    if (field.name === "production_") {
                       return (
                         <td key={field.id}>
                           <input
@@ -405,15 +426,21 @@ const DynamicForm = ({
                       <td key={field.id}>
                         {renderField(
                           field,
-                          row[field.id],
-                          (fieldId, value) =>
-                            handleTableRowChange(rowIndex, fieldId, value),
-                          `row_${rowIndex}_${field.id}`,
+                          row[field.name] || row[field.id], // Use field.name for value access
+                          (fieldName, value) =>
+                            handleTableRowChange(rowIndex, fieldName, value),
+                          `row_${rowIndex}_${field.name || field.id}`,
                           fieldMode
                         )}
-                        {errors[`row_${rowIndex}_${field.id}`] && (
+                        {errors[
+                          `row_${rowIndex}_${field.name || field.id}`
+                        ] && (
                           <div className="error-message">
-                            {errors[`row_${rowIndex}_${field.id}`]}
+                            {
+                              errors[
+                                `row_${rowIndex}_${field.name || field.id}`
+                              ]
+                            }
                           </div>
                         )}
                       </td>
@@ -447,13 +474,15 @@ const DynamicForm = ({
           <label htmlFor={field.id}>{field.label}</label>
           {renderField(
             field,
-            formData[field.id],
+            formData[field.name || field.id],
             handleHeaderChange,
-            field.id,
+            field.name || field.id,
             "edit"
           )}
-          {errors[field.id] && (
-            <span className="error-message">{errors[field.id]}</span>
+          {errors[field.name || field.id] && (
+            <span className="error-message">
+              {errors[field.name || field.id]}
+            </span>
           )}
         </div>
       ))}

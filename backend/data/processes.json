@@ -1,0 +1,606 @@
+[
+  {
+    "id": 1,
+    "name": "Production Planning Workflow",
+    "tasks": [
+      {
+        "id": 1001,
+        "name": "Monthly Production Plan",
+        "assignedRole": "plant_head",
+        "assignedUserId": 4,
+        "status": "pending",
+        "dependencies": [],
+        "formId": "F-PRODUCTION-PLAN-ENTRY",
+        "trigger": {
+          "type": "time",
+          "recurrence": "monthly",
+          "dayOfMonth": "30"
+        },
+        "dueDateRule": {
+          "type": "end_of_month_minus_days",
+          "days": 3
+        },
+        "formData": null,
+        "lastUpdated": null,
+        "isTemplate": true,
+        "templateId": null
+      },
+      {
+        "id": 2001,
+        "name": "Weekly Production Plan",
+        "assignedRole": "plant_head",
+        "status": "completed",
+        "dependencies": [],
+        "formId": "F-PRODUCTION-PLAN-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1001
+        },
+        "formData": null,
+        "lastUpdated": null,
+        "isTemplate": true,
+        "templateId": null
+      },
+      {
+        "id": 2002,
+        "name": "Daily Production Plan",
+        "assignedRole": "production_manager",
+        "status": "completed",
+        "dependencies": [],
+        "formId": "F-DAILY-PRODUCTION-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 2001
+        },
+        "formData": null,
+        "lastUpdated": null,
+        "isTemplate": true,
+        "templateId": null
+      },
+      {
+        "id": 1753875600031,
+        "name": "Monthly Production Plan - August 2025",
+        "assignedRole": "plant_head",
+        "assignedUserId": 4,
+        "status": "completed",
+        "dependencies": [],
+        "formId": "F-PRODUCTION-PLAN-ENTRY",
+        "trigger": {
+          "type": "time",
+          "recurrence": "monthly",
+          "dayOfMonth": "30"
+        },
+        "dueDateRule": {
+          "type": "end_of_month_minus_days",
+          "days": 3
+        },
+        "formData": {
+          "month_start_date": "2025-08-01",
+          "rows": [
+            {
+              "item_name": "SBA004",
+              "customer_name": "Eicher",
+              "monthly_qty": "4000",
+              "weekly_qty": ""
+            },
+            {
+              "item_name": "SBA062",
+              "customer_name": "Eicher",
+              "monthly_qty": "4000",
+              "weekly_qty": ""
+            },
+            {
+              "item_name": "SBA093",
+              "customer_name": "Eicher",
+              "monthly_qty": "600",
+              "weekly_qty": ""
+            },
+            {
+              "item_name": "SBA007",
+              "customer_name": "Eicher",
+              "monthly_qty": "2000",
+              "weekly_qty": ""
+            }
+          ]
+        },
+        "lastUpdated": "2025-07-30T11:44:01.653Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 1001,
+        "dueDate": "2025-08-28T08:15:00.000Z"
+      },
+      {
+        "id": 1753875600032,
+        "name": "Weekly Production Plan - Week 1 (1-7) - August 2025",
+        "assignedRole": "plant_head",
+        "status": "completed",
+        "dependencies": [
+          1753875600031
+        ],
+        "formId": "F-PRODUCTION-PLAN-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600031
+        },
+        "formData": {
+          "month_start_date": "2025-08-01",
+          "week_number": 1,
+          "week_dates": "1-7",
+          "rows": [
+            {
+              "item_name": "SBA004",
+              "customer_name": "Eicher",
+              "monthly_qty": "4000",
+              "weekly_qty": "500"
+            },
+            {
+              "item_name": "SBA062",
+              "customer_name": "Eicher",
+              "monthly_qty": "4000",
+              "weekly_qty": "500"
+            },
+            {
+              "item_name": "SBA093",
+              "customer_name": "Eicher",
+              "monthly_qty": "600",
+              "weekly_qty": "150"
+            },
+            {
+              "item_name": "SBA007",
+              "customer_name": "Eicher",
+              "monthly_qty": "2000",
+              "weekly_qty": "500"
+            }
+          ]
+        },
+        "lastUpdated": "2025-07-30T11:44:57.151Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2001
+      },
+      {
+        "id": 1753875600033,
+        "name": "Weekly Production Plan - Week 2 (8-14) - August 2025",
+        "assignedRole": "plant_head",
+        "status": "completed",
+        "dependencies": [
+          1753875600031
+        ],
+        "formId": "F-PRODUCTION-PLAN-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600031
+        },
+        "formData": {
+          "month_start_date": "2025-08-01",
+          "week_number": 2,
+          "week_dates": "8-14",
+          "rows": [
+            {
+              "item_name": "SBA004",
+              "customer_name": "Eicher",
+              "monthly_qty": "4000",
+              "weekly_qty": "1000"
+            },
+            {
+              "item_name": "SBA062",
+              "customer_name": "Eicher",
+              "monthly_qty": "4000",
+              "weekly_qty": "1000"
+            },
+            {
+              "item_name": "SBA093",
+              "customer_name": "Eicher",
+              "monthly_qty": "600",
+              "weekly_qty": "150"
+            },
+            {
+              "item_name": "SBA007",
+              "customer_name": "Eicher",
+              "monthly_qty": "2000",
+              "weekly_qty": "1000"
+            }
+          ]
+        },
+        "lastUpdated": "2025-07-30T12:09:46.653Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2001
+      },
+      {
+        "id": 1753875600034,
+        "name": "Weekly Production Plan - Week 3 (15-21) - August 2025",
+        "assignedRole": "plant_head",
+        "status": "pending",
+        "dependencies": [
+          1753875600031
+        ],
+        "formId": "F-PRODUCTION-PLAN-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600031
+        },
+        "formData": {
+          "month_start_date": "2025-08-01",
+          "week_number": 3,
+          "week_dates": "15-21",
+          "rows": [
+            {
+              "item_name": "SBA004",
+              "customer_name": "Eicher",
+              "monthly_qty": "4000",
+              "weekly_qty": ""
+            },
+            {
+              "item_name": "SBA062",
+              "customer_name": "Eicher",
+              "monthly_qty": "4000",
+              "weekly_qty": ""
+            },
+            {
+              "item_name": "SBA093",
+              "customer_name": "Eicher",
+              "monthly_qty": "600",
+              "weekly_qty": ""
+            },
+            {
+              "item_name": "SBA007",
+              "customer_name": "Eicher",
+              "monthly_qty": "2000",
+              "weekly_qty": ""
+            }
+          ]
+        },
+        "lastUpdated": "2025-07-30T11:44:01.656Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2001
+      },
+      {
+        "id": 1753875600035,
+        "name": "Weekly Production Plan - Week 4 (22-28) - August 2025",
+        "assignedRole": "plant_head",
+        "status": "pending",
+        "dependencies": [
+          1753875600031
+        ],
+        "formId": "F-PRODUCTION-PLAN-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600031
+        },
+        "formData": {
+          "month_start_date": "2025-08-01",
+          "week_number": 4,
+          "week_dates": "22-28",
+          "rows": [
+            {
+              "item_name": "SBA004",
+              "customer_name": "Eicher",
+              "monthly_qty": "4000",
+              "weekly_qty": ""
+            },
+            {
+              "item_name": "SBA062",
+              "customer_name": "Eicher",
+              "monthly_qty": "4000",
+              "weekly_qty": ""
+            },
+            {
+              "item_name": "SBA093",
+              "customer_name": "Eicher",
+              "monthly_qty": "600",
+              "weekly_qty": ""
+            },
+            {
+              "item_name": "SBA007",
+              "customer_name": "Eicher",
+              "monthly_qty": "2000",
+              "weekly_qty": ""
+            }
+          ]
+        },
+        "lastUpdated": "2025-07-30T11:44:01.656Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2001
+      },
+      {
+        "id": 1753875600036,
+        "name": "Weekly Production Plan - Week 5 (29-31) - August 2025",
+        "assignedRole": "plant_head",
+        "status": "pending",
+        "dependencies": [
+          1753875600031
+        ],
+        "formId": "F-PRODUCTION-PLAN-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600031
+        },
+        "formData": {
+          "month_start_date": "2025-08-01",
+          "week_number": 5,
+          "week_dates": "29-31",
+          "rows": [
+            {
+              "item_name": "SBA004",
+              "customer_name": "Eicher",
+              "monthly_qty": "4000",
+              "weekly_qty": ""
+            },
+            {
+              "item_name": "SBA062",
+              "customer_name": "Eicher",
+              "monthly_qty": "4000",
+              "weekly_qty": ""
+            },
+            {
+              "item_name": "SBA093",
+              "customer_name": "Eicher",
+              "monthly_qty": "600",
+              "weekly_qty": ""
+            },
+            {
+              "item_name": "SBA007",
+              "customer_name": "Eicher",
+              "monthly_qty": "2000",
+              "weekly_qty": ""
+            }
+          ]
+        },
+        "lastUpdated": "2025-07-30T11:44:01.657Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2001
+      },
+      {
+        "id": 1753875600037,
+        "name": "Daily Production Plan - Week 1 Day 1 - August 2025",
+        "assignedRole": "production_manager",
+        "status": "pending",
+        "dependencies": [
+          1753875600032
+        ],
+        "formId": "F-DAILY-PRODUCTION-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600032
+        },
+        "formData": null,
+        "lastUpdated": "2025-07-30T11:44:50.528Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2002
+      },
+      {
+        "id": 1753875600038,
+        "name": "Daily Production Plan - Week 1 Day 2 - August 2025",
+        "assignedRole": "production_manager",
+        "status": "pending",
+        "dependencies": [
+          1753875600032
+        ],
+        "formId": "F-DAILY-PRODUCTION-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600032
+        },
+        "formData": null,
+        "lastUpdated": "2025-07-30T11:44:50.528Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2002
+      },
+      {
+        "id": 1753875600039,
+        "name": "Daily Production Plan - Week 1 Day 3 - August 2025",
+        "assignedRole": "production_manager",
+        "status": "pending",
+        "dependencies": [
+          1753875600032
+        ],
+        "formId": "F-DAILY-PRODUCTION-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600032
+        },
+        "formData": null,
+        "lastUpdated": "2025-07-30T11:44:50.528Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2002
+      },
+      {
+        "id": 1753875600040,
+        "name": "Daily Production Plan - Week 1 Day 4 - August 2025",
+        "assignedRole": "production_manager",
+        "status": "pending",
+        "dependencies": [
+          1753875600032
+        ],
+        "formId": "F-DAILY-PRODUCTION-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600032
+        },
+        "formData": null,
+        "lastUpdated": "2025-07-30T11:44:50.529Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2002
+      },
+      {
+        "id": 1753875600041,
+        "name": "Daily Production Plan - Week 1 Day 5 - August 2025",
+        "assignedRole": "production_manager",
+        "status": "pending",
+        "dependencies": [
+          1753875600032
+        ],
+        "formId": "F-DAILY-PRODUCTION-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600032
+        },
+        "formData": null,
+        "lastUpdated": "2025-07-30T11:44:50.529Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2002
+      },
+      {
+        "id": 1753875600042,
+        "name": "Daily Production Plan - Week 1 Day 6 - August 2025",
+        "assignedRole": "production_manager",
+        "status": "pending",
+        "dependencies": [
+          1753875600032
+        ],
+        "formId": "F-DAILY-PRODUCTION-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600032
+        },
+        "formData": null,
+        "lastUpdated": "2025-07-30T11:44:50.529Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2002
+      },
+      {
+        "id": 1753875600043,
+        "name": "Daily Production Plan - Week 2 Day 1 - August 2025",
+        "assignedRole": "production_manager",
+        "status": "pending",
+        "dependencies": [
+          1753875600033
+        ],
+        "formId": "F-DAILY-PRODUCTION-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600033
+        },
+        "formData": null,
+        "lastUpdated": "2025-07-30T12:09:46.654Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2002
+      },
+      {
+        "id": 1753875600044,
+        "name": "Daily Production Plan - Week 2 Day 2 - August 2025",
+        "assignedRole": "production_manager",
+        "status": "pending",
+        "dependencies": [
+          1753875600033
+        ],
+        "formId": "F-DAILY-PRODUCTION-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600033
+        },
+        "formData": null,
+        "lastUpdated": "2025-07-30T12:09:46.654Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2002
+      },
+      {
+        "id": 1753875600045,
+        "name": "Daily Production Plan - Week 2 Day 3 - August 2025",
+        "assignedRole": "production_manager",
+        "status": "pending",
+        "dependencies": [
+          1753875600033
+        ],
+        "formId": "F-DAILY-PRODUCTION-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600033
+        },
+        "formData": null,
+        "lastUpdated": "2025-07-30T12:09:46.654Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2002
+      },
+      {
+        "id": 1753875600046,
+        "name": "Daily Production Plan - Week 2 Day 4 - August 2025",
+        "assignedRole": "production_manager",
+        "status": "pending",
+        "dependencies": [
+          1753875600033
+        ],
+        "formId": "F-DAILY-PRODUCTION-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600033
+        },
+        "formData": null,
+        "lastUpdated": "2025-07-30T12:09:46.654Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2002
+      },
+      {
+        "id": 1753875600047,
+        "name": "Daily Production Plan - Week 2 Day 5 - August 2025",
+        "assignedRole": "production_manager",
+        "status": "pending",
+        "dependencies": [
+          1753875600033
+        ],
+        "formId": "F-DAILY-PRODUCTION-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600033
+        },
+        "formData": null,
+        "lastUpdated": "2025-07-30T12:09:46.654Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2002
+      },
+      {
+        "id": 1753875600048,
+        "name": "Daily Production Plan - Week 2 Day 6 - August 2025",
+        "assignedRole": "production_manager",
+        "status": "pending",
+        "dependencies": [
+          1753875600033
+        ],
+        "formId": "F-DAILY-PRODUCTION-ENTRY",
+        "trigger": {
+          "type": "event",
+          "event": "task_completed",
+          "taskId": 1753875600033
+        },
+        "formData": null,
+        "lastUpdated": "2025-07-30T12:09:46.654Z",
+        "createdForMonth": "2025-08",
+        "isTemplate": false,
+        "templateId": 2002
+      }
+    ]
+  }
+]

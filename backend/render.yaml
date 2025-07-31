@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: rbac-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: USE_MONGODB
+        value: true
+      - key: PORT
+        value: 10000
+      - key: CORS_ORIGIN
+        value: https://your-frontend-app.onrender.com
+      # Add your MongoDB Atlas URI here
+      - key: MONGODB_URI
+        sync: false

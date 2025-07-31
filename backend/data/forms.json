@@ -1,89 +1,350 @@
 {
   "submissions": [
     {
-      "id": "1753691874669",
-      "taskId": "1007",
-      "formId": "F-DAILY-PRODUCTION-ENTRY",
-      "submittedAt": "2025-07-28T08:37:54.669Z",
-      "formData": {
-        "date": "2025-08-01",
-        "rows": [
-          {
-            "dept_name": "Smt line",
-            "operator_name": "Akhilesh",
-            "work": "cv charger usb pcb smt work",
-            "h1_plan": "150",
-            "h1_actual": "",
-            "h2_plan": "200",
-            "h2_actual": "",
-            "ot_plan": "",
-            "ot_actual": "",
-            "quality_defects": "",
-            "defect_details": "",
-            "responsible_person": "",
-            "target_qty": "",
-            "actual_production": "",
-            "production_percentage": "",
-            "reason": "",
-            "rework": ""
-          },
-          {
-            "dept_name": "Smt line",
-            "operator_name": "Naresh ",
-            "work": "cv charger usb pcb smt work",
-            "h1_plan": "200",
-            "h1_actual": "",
-            "h2_plan": "",
-            "h2_actual": "",
-            "ot_plan": "",
-            "ot_actual": "",
-            "quality_defects": "",
-            "defect_details": "",
-            "responsible_person": "",
-            "target_qty": "",
-            "actual_production": "",
-            "production_percentage": "",
-            "reason": "",
-            "rework": ""
-          }
-        ]
-      }
-    },
-    {
-      "id": "1753692074721",
-      "taskId": "1001",
+      "id": "1753875841653",
+      "taskId": "1753875600031",
       "formId": "F-PRODUCTION-PLAN-ENTRY",
-      "submittedAt": "2025-07-28T08:41:14.721Z",
+      "submittedAt": "2025-07-30T11:44:01.653Z",
       "formData": {
         "month_start_date": "2025-08-01",
         "rows": [
           {
-            "item_name": "CV Charger Dual USB",
-            "customer_name": "SML",
-            "monthly_qty": "10000",
+            "item_name": "SBA004",
+            "customer_name": "Eicher",
+            "monthly_qty": "4000",
+            "weekly_qty": ""
+          },
+          {
+            "item_name": "SBA062",
+            "customer_name": "Eicher",
+            "monthly_qty": "4000",
+            "weekly_qty": ""
+          },
+          {
+            "item_name": "SBA093",
+            "customer_name": "Eicher",
+            "monthly_qty": "600",
+            "weekly_qty": ""
+          },
+          {
+            "item_name": "SBA007",
+            "customer_name": "Eicher",
+            "monthly_qty": "2000",
             "weekly_qty": ""
           }
         ]
       }
     },
     {
-      "id": "1753692087819",
-      "taskId": "1002",
+      "id": "1753875897151",
+      "taskId": "1753875600032",
       "formId": "F-PRODUCTION-PLAN-ENTRY",
-      "submittedAt": "2025-07-28T08:41:27.819Z",
+      "submittedAt": "2025-07-30T11:44:57.151Z",
       "formData": {
         "month_start_date": "2025-08-01",
         "week_number": 1,
         "week_dates": "1-7",
         "rows": [
           {
-            "item_name": "CV Charger Dual USB",
-            "customer_name": "SML",
-            "monthly_qty": "10000",
-            "weekly_qty": "2000"
+            "item_name": "SBA004",
+            "customer_name": "Eicher",
+            "monthly_qty": "4000",
+            "weekly_qty": "500"
+          },
+          {
+            "item_name": "SBA062",
+            "customer_name": "Eicher",
+            "monthly_qty": "4000",
+            "weekly_qty": "500"
+          },
+          {
+            "item_name": "SBA093",
+            "customer_name": "Eicher",
+            "monthly_qty": "600",
+            "weekly_qty": "150"
+          },
+          {
+            "item_name": "SBA007",
+            "customer_name": "Eicher",
+            "monthly_qty": "2000",
+            "weekly_qty": "500"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1753877386653",
+      "taskId": "1753875600033",
+      "formId": "F-PRODUCTION-PLAN-ENTRY",
+      "submittedAt": "2025-07-30T12:09:46.653Z",
+      "formData": {
+        "month_start_date": "2025-08-01",
+        "week_number": 2,
+        "week_dates": "8-14",
+        "rows": [
+          {
+            "item_name": "SBA004",
+            "customer_name": "Eicher",
+            "monthly_qty": "4000",
+            "weekly_qty": "1000"
+          },
+          {
+            "item_name": "SBA062",
+            "customer_name": "Eicher",
+            "monthly_qty": "4000",
+            "weekly_qty": "1000"
+          },
+          {
+            "item_name": "SBA093",
+            "customer_name": "Eicher",
+            "monthly_qty": "600",
+            "weekly_qty": "150"
+          },
+          {
+            "item_name": "SBA007",
+            "customer_name": "Eicher",
+            "monthly_qty": "2000",
+            "weekly_qty": "1000"
           }
         ]
       }
     }
-  ]
+  ],
+  "F-PRODUCTION-PLAN-ENTRY": {
+    "name": "Production Plan Entry",
+    "type": "table",
+    "fields": [
+      {
+        "id": "month_start_date",
+        "label": "Month Start Date",
+        "type": "date",
+        "required": true,
+        "isHeader": true
+      },
+      {
+        "id": "week_number",
+        "label": "Week Number",
+        "type": "number",
+        "required": false,
+        "isHeader": true,
+        "readonly": true
+      },
+      {
+        "id": "week_dates",
+        "label": "Week Dates",
+        "type": "text",
+        "required": false,
+        "isHeader": true,
+        "readonly": true
+      }
+    ],
+    "tableFields": [
+      {
+        "id": "item_name",
+        "label": "Item Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "customer_name",
+        "label": "Customer Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "monthly_qty",
+        "label": "Monthly Quantity",
+        "type": "number",
+        "required": true
+      },
+      {
+        "id": "weekly_qty",
+        "label": "Weekly Quantity",
+        "type": "number",
+        "required": false
+      }
+    ]
+  },
+  "F-DAILY-PRODUCTION-ENTRY": {
+    "name": "Daily Production Entry",
+    "type": "table",
+    "fields": [
+      {
+        "id": "date",
+        "label": "Date",
+        "type": "date",
+        "required": true,
+        "isHeader": true,
+        "readonly": false
+      }
+    ],
+    "tableFields": [
+      {
+        "id": "dept_name",
+        "label": "Dept. Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "operator_name",
+        "label": "Operator Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "work",
+        "label": "Work",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "h1_plan",
+        "label": "H1 Plan",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "h1_actual",
+        "label": "H1 Actual",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "h2_plan",
+        "label": "H2 Plan",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "h2_actual",
+        "label": "H2 Actual",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "ot_plan",
+        "label": "OT Plan",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "ot_actual",
+        "label": "OT Actual",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "quality_defects",
+        "label": "Quality Defects",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "defect_details",
+        "label": "Defect Details",
+        "type": "text",
+        "required": false
+      },
+      {
+        "id": "responsible_person",
+        "label": "Responsible Person",
+        "type": "text",
+        "required": false
+      },
+      {
+        "id": "target_qty",
+        "label": "Target Qty",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "actual_production",
+        "label": "Actual Production",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "production_percentage",
+        "label": "Production %",
+        "type": "number",
+        "required": false
+      },
+      {
+        "id": "reason",
+        "label": "Reason",
+        "type": "text",
+        "required": false
+      },
+      {
+        "id": "rework",
+        "label": "Rework",
+        "type": "text",
+        "required": false
+      }
+    ]
+  },
+  "F-ACTION-PLAN": {
+    "name": "Action Plan for Low Production",
+    "type": "table",
+    "fields": [
+      {
+        "id": "date",
+        "label": "Date",
+        "type": "date",
+        "required": true,
+        "isHeader": true
+      }
+    ],
+    "tableFields": [
+      {
+        "id": "department",
+        "label": "Dept. Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "operator_name",
+        "label": "Operator Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "work_description",
+        "label": "Work Description",
+        "type": "text",
+        "required": true
+      },
+      {
+        "id": "target_qty",
+        "label": "Target QTY",
+        "type": "number",
+        "required": true
+      },
+      {
+        "id": "actual_production",
+        "label": "Actual Production",
+        "type": "number",
+        "required": true
+      },
+      {
+        "id": "achievement_percentage",
+        "label": "Achievement %",
+        "type": "number",
+        "required": true,
+        "readonly": true
+      },
+      {
+        "id": "reason_for_low_production",
+        "label": "Reason for Low Production",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "id": "corrective_actions",
+        "label": "Corrective Actions",
+        "type": "textarea",
+        "required": true
+      }
+    ]
+  }
 }

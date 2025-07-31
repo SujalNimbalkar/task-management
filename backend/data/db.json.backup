@@ -1,0 +1,1722 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Admin User",
+      "email": "admin@bcpl.com",
+      "phone": "+91-9876543210",
+      "employeeId": "EMP001",
+      "department": "IT",
+      "designation": "System Administrator",
+      "roles": [
+        "admin"
+      ],
+      "isActive": true,
+      "joinDate": "2020-01-15",
+      "lastLogin": "2025-01-28T10:30:00.000Z"
+    },
+    {
+      "id": 2,
+      "name": "Amit Kumar Parida",
+      "email": "amit.parida@bcpl.com",
+      "phone": "+91-9876543211",
+      "employeeId": "EMP002",
+      "department": "Production",
+      "designation": "Production Manager",
+      "roles": [
+        "production_manager"
+      ],
+      "isActive": true,
+      "joinDate": "2021-03-20",
+      "lastLogin": "2025-01-28T09:15:00.000Z"
+    },
+    {
+      "id": 4,
+      "name": "Narendra Chauhan",
+      "email": "narendra.chauhan@bcpl.com",
+      "phone": "+91-9876543213",
+      "employeeId": "EMP004",
+      "department": "Production",
+      "designation": "Plant Head",
+      "roles": [
+        "plant_head"
+      ],
+      "isActive": true,
+      "joinDate": "2019-11-05",
+      "lastLogin": "2025-01-28T11:20:00.000Z"
+    }
+  ],
+  "forms": {
+    "F-PRODUCTION-PLAN-ENTRY": {
+      "name": "Production Plan Entry",
+      "type": "table",
+      "fields": [
+        {
+          "id": "month_start_date",
+          "label": "Month Start Date",
+          "type": "date",
+          "required": true,
+          "isHeader": true
+        },
+        {
+          "id": "week_number",
+          "label": "Week Number",
+          "type": "number",
+          "required": false,
+          "isHeader": true,
+          "readonly": true
+        },
+        {
+          "id": "week_dates",
+          "label": "Week Dates",
+          "type": "text",
+          "required": false,
+          "isHeader": true,
+          "readonly": true
+        }
+      ],
+      "tableFields": [
+        {
+          "id": "item_name",
+          "label": "Item Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "customer_name",
+          "label": "Customer Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "monthly_qty",
+          "label": "Monthly Quantity",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "weekly_qty",
+          "label": "Weekly Quantity",
+          "type": "number",
+          "required": false
+        }
+      ]
+    },
+    "F-DAILY-PRODUCTION-ENTRY": {
+      "name": "Daily Production Entry",
+      "type": "table",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date",
+          "type": "date",
+          "required": true,
+          "isHeader": true,
+          "readonly": false
+        }
+      ],
+      "tableFields": [
+        {
+          "id": "dept_name",
+          "label": "Dept. Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "operator_name",
+          "label": "Operator Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "work",
+          "label": "Work",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "h1_plan",
+          "label": "H1 Plan",
+          "type": "number",
+          "required": false
+        },
+        {
+          "id": "h1_actual",
+          "label": "H1 Actual",
+          "type": "number",
+          "required": false
+        },
+        {
+          "id": "h2_plan",
+          "label": "H2 Plan",
+          "type": "number",
+          "required": false
+        },
+        {
+          "id": "h2_actual",
+          "label": "H2 Actual",
+          "type": "number",
+          "required": false
+        },
+        {
+          "id": "ot_plan",
+          "label": "OT Plan",
+          "type": "number",
+          "required": false
+        },
+        {
+          "id": "ot_actual",
+          "label": "OT Actual",
+          "type": "number",
+          "required": false
+        },
+        {
+          "id": "quality_defects",
+          "label": "Quality Defect",
+          "type": "number",
+          "required": false
+        },
+        {
+          "id": "defect_details",
+          "label": "Defect Details",
+          "type": "textarea",
+          "required": false
+        },
+        {
+          "id": "responsible_person",
+          "label": "Responsible Person",
+          "type": "text",
+          "required": false
+        },
+        {
+          "id": "target_qty",
+          "label": "Target Qty",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "actual_production",
+          "label": "Actual Production",
+          "type": "number",
+          "required": false
+        },
+        {
+          "id": "production_percentage",
+          "label": "Production %",
+          "type": "number",
+          "required": false,
+          "readonly": true
+        },
+        {
+          "id": "reason",
+          "label": "Reason",
+          "type": "textarea",
+          "required": false
+        },
+        {
+          "id": "rework",
+          "label": "Rework",
+          "type": "text",
+          "required": false
+        }
+      ]
+    },
+    "F-ACTION-PLAN": {
+      "name": "Action Plan for Low Production",
+      "type": "table",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date",
+          "type": "date",
+          "required": true,
+          "isHeader": true
+        }
+      ],
+      "tableFields": [
+        {
+          "id": "department",
+          "label": "Dept. Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "operator_name",
+          "label": "Operator Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "work_description",
+          "label": "Work Description",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "target_qty",
+          "label": "Target QTY",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "actual_production",
+          "label": "Actual Production",
+          "type": "number",
+          "required": true
+        },
+        {
+          "id": "achievement_percentage",
+          "label": "Achievement %",
+          "type": "number",
+          "required": true,
+          "readonly": true
+        },
+        {
+          "id": "reason_for_low_production",
+          "label": "Reason for Low Production",
+          "type": "textarea",
+          "required": true
+        },
+        {
+          "id": "corrective_actions",
+          "label": "Corrective Actions",
+          "type": "textarea",
+          "required": true
+        }
+      ]
+    }
+  },
+  "processes": [
+    {
+      "id": 1,
+      "name": "Production Planning Workflow",
+      "tasks": [
+        {
+          "id": 1001,
+          "name": "Monthly Production Plan",
+          "assignedRole": "plant_head",
+          "assignedUserId": 4,
+          "status": "completed",
+          "dependencies": [],
+          "formId": "F-PRODUCTION-PLAN-ENTRY",
+          "trigger": {
+            "type": "time",
+            "recurrence": "monthly",
+            "dayOfMonth": "30"
+          },
+          "dueDateRule": {
+            "type": "end_of_month_minus_days",
+            "days": 3
+          },
+          "formData": null,
+          "lastUpdated": null
+        },
+        {
+          "id": 1007,
+          "name": "Daily Production Plan - Week 1 Day 1",
+          "assignedRole": "production_manager",
+          "assignedUserId": 2,
+          "status": "pending",
+          "dependencies": [
+            1002
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1002
+          },
+          "formData": {
+            "date": "2025-08-01",
+            "rows": [
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Akhilesh",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "150",
+                "h1_actual": "",
+                "h2_plan": "200",
+                "h2_actual": "",
+                "ot_plan": "",
+                "ot_actual": "",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "target_qty": "350",
+                "actual_production": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              },
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Naresh ",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "200",
+                "h1_actual": "",
+                "h2_plan": "",
+                "h2_actual": "",
+                "ot_plan": "",
+                "ot_actual": "",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "target_qty": "200",
+                "actual_production": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-28T10:00:51.002Z"
+        },
+        {
+          "id": 1008,
+          "name": "Daily Production Plan - Week 1 Day 2",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1002
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1002
+          },
+          "formData": {
+            "date": "2025-08-02",
+            "rows": [
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Akhilesh",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "200",
+                "h1_actual": "",
+                "h2_plan": "",
+                "h2_actual": "",
+                "ot_plan": "",
+                "ot_actual": "",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "target_qty": "200",
+                "actual_production": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-28T10:05:15.419Z"
+        },
+        {
+          "id": 1009,
+          "name": "Daily Production Plan - Week 1 Day 3",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1002
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1002
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T08:41:27.820Z"
+        },
+        {
+          "id": 1010,
+          "name": "Daily Production Plan - Week 1 Day 4",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1002
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1002
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T08:41:27.820Z"
+        },
+        {
+          "id": 1011,
+          "name": "Daily Production Plan - Week 1 Day 5",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1002
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1002
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T08:41:27.820Z"
+        },
+        {
+          "id": 1012,
+          "name": "Daily Production Plan - Week 1 Day 6",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1002
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1002
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T08:41:27.820Z"
+        },
+        {
+          "id": 1013,
+          "name": "Daily Production Plan - Week 2 Day 1",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1003
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1003
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T05:51:39.488Z"
+        },
+        {
+          "id": 1014,
+          "name": "Daily Production Plan - Week 2 Day 2",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1003
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1003
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T05:51:39.489Z"
+        },
+        {
+          "id": 1015,
+          "name": "Daily Production Plan - Week 2 Day 3",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1003
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1003
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T05:51:39.489Z"
+        },
+        {
+          "id": 1016,
+          "name": "Daily Production Plan - Week 2 Day 4",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1003
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1003
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T05:51:39.489Z"
+        },
+        {
+          "id": 1017,
+          "name": "Daily Production Plan - Week 2 Day 5",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1003
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1003
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T05:51:39.489Z"
+        },
+        {
+          "id": 1018,
+          "name": "Daily Production Plan - Week 2 Day 6",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1003
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1003
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T05:51:39.489Z"
+        },
+        {
+          "id": 1019,
+          "name": "Daily Production Plan - Week 5 Day 1",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1006
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1006
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T05:52:03.854Z"
+        },
+        {
+          "id": 1020,
+          "name": "Daily Production Plan - Week 5 Day 2",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1006
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1006
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T05:52:03.855Z"
+        },
+        {
+          "id": 1021,
+          "name": "Daily Production Plan - Week 5 Day 3",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1006
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1006
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T05:52:03.855Z"
+        },
+        {
+          "id": 1022,
+          "name": "Daily Production Plan - Week 3 Day 1",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1004
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1004
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T07:08:46.418Z"
+        },
+        {
+          "id": 1023,
+          "name": "Daily Production Plan - Week 3 Day 2",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1004
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1004
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T07:08:46.419Z"
+        },
+        {
+          "id": 1024,
+          "name": "Daily Production Plan - Week 3 Day 3",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1004
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1004
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T07:08:46.419Z"
+        },
+        {
+          "id": 1025,
+          "name": "Daily Production Plan - Week 3 Day 4",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1004
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1004
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T07:08:46.420Z"
+        },
+        {
+          "id": 1026,
+          "name": "Daily Production Plan - Week 3 Day 5",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1004
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1004
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T07:08:46.420Z"
+        },
+        {
+          "id": 1027,
+          "name": "Daily Production Plan - Week 3 Day 6",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1004
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1004
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T07:08:46.420Z"
+        },
+        {
+          "id": 1028,
+          "name": "Daily Production Plan - Week 4 Day 1",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1005
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1005
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T06:50:28.817Z"
+        },
+        {
+          "id": 1029,
+          "name": "Daily Production Plan - Week 4 Day 2",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1005
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1005
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T06:50:28.817Z"
+        },
+        {
+          "id": 1030,
+          "name": "Daily Production Plan - Week 4 Day 3",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1005
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1005
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T06:50:28.817Z"
+        },
+        {
+          "id": 1031,
+          "name": "Daily Production Plan - Week 4 Day 4",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1005
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1005
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T06:50:28.817Z"
+        },
+        {
+          "id": 1032,
+          "name": "Daily Production Plan - Week 4 Day 5",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1005
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1005
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T06:50:28.817Z"
+        },
+        {
+          "id": 1033,
+          "name": "Daily Production Plan - Week 4 Day 6",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1005
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1005
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-28T06:50:28.817Z"
+        },
+        {
+          "id": 1034,
+          "name": "Daily Production Report - Week 1 Day 1",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1007
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1007
+          },
+          "formData": {
+            "date": "2025-08-01",
+            "rows": [
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Akhilesh",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "150",
+                "h2_plan": "200",
+                "ot_plan": "",
+                "target_qty": "350",
+                "h1_actual": "",
+                "h2_actual": "",
+                "ot_actual": "",
+                "actual_production": "",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              },
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Naresh ",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "200",
+                "h2_plan": "",
+                "ot_plan": "",
+                "target_qty": "200",
+                "h1_actual": "",
+                "h2_actual": "",
+                "ot_actual": "",
+                "actual_production": "",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-28T10:00:51.002Z"
+        },
+        {
+          "id": 1035,
+          "name": "Daily Production Report - Week 1 Day 2",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1008
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1008
+          },
+          "formData": {
+            "date": "2025-08-02",
+            "rows": [
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Akhilesh",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "200",
+                "h2_plan": "",
+                "ot_plan": "",
+                "target_qty": "200",
+                "h1_actual": "",
+                "h2_actual": "",
+                "ot_actual": "",
+                "actual_production": "",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-28T10:05:15.419Z"
+        },
+        {
+          "id": 1753777740037,
+          "name": "Daily Production Plan - Week 1 Day 1",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1753777740026
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753777740026
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-29T08:30:09.030Z"
+        },
+        {
+          "id": 1753777740038,
+          "name": "Daily Production Plan - Week 1 Day 2",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1753777740026
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753777740026
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-29T08:30:09.030Z"
+        },
+        {
+          "id": 1753777740039,
+          "name": "Daily Production Plan - Week 1 Day 3",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1753777740026
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753777740026
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-29T08:30:09.030Z"
+        },
+        {
+          "id": 1753777740040,
+          "name": "Daily Production Plan - Week 1 Day 4",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1753777740026
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753777740026
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-29T08:30:09.031Z"
+        },
+        {
+          "id": 1753777740041,
+          "name": "Daily Production Plan - Week 1 Day 5",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1753777740026
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753777740026
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-29T08:30:09.031Z"
+        },
+        {
+          "id": 1753777740042,
+          "name": "Daily Production Plan - Week 1 Day 6",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1753777740026
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753777740026
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-29T08:30:09.031Z"
+        },
+        {
+          "id": 1753777740043,
+          "name": "Daily Production Report - Week 1 Day 1",
+          "assignedRole": "production_manager",
+          "status": "completed",
+          "dependencies": [
+            1753777740027
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753777740027
+          },
+          "formData": {
+            "date": "2025-08-01",
+            "rows": [
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Akhilesh",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "200",
+                "h2_plan": "200",
+                "ot_plan": "",
+                "target_qty": "400",
+                "h1_actual": "200",
+                "h2_actual": "200",
+                "ot_actual": "",
+                "actual_production": "",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-29T08:32:57.664Z"
+        },
+        {
+          "id": 2001,
+          "name": "Weekly Production Plan",
+          "assignedRole": "plant_head",
+          "status": "completed",
+          "dependencies": [],
+          "formId": "F-PRODUCTION-PLAN-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1001
+          },
+          "formData": null,
+          "lastUpdated": null
+        },
+        {
+          "id": 2002,
+          "name": "Daily Production Plan",
+          "assignedRole": "production_manager",
+          "status": "completed",
+          "dependencies": [],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 2001
+          },
+          "formData": null,
+          "lastUpdated": null
+        },
+        {
+          "id": 1753780080098,
+          "name": "Monthly Production Plan - August 2025",
+          "assignedRole": "plant_head",
+          "status": "completed",
+          "dependencies": [],
+          "formId": "F-PRODUCTION-PLAN-ENTRY",
+          "trigger": {
+            "type": "time",
+            "recurrence": "monthly",
+            "dayOfMonth": "29"
+          },
+          "dueDateRule": {
+            "type": "end_of_month_minus_days",
+            "days": 3
+          },
+          "formData": {
+            "month_start_date": "2025-08-01",
+            "rows": [
+              {
+                "item_name": "CV Charger Dual USB",
+                "customer_name": "Eicher",
+                "monthly_qty": "2000",
+                "weekly_qty": ""
+              },
+              {
+                "item_name": "Micro Siren",
+                "customer_name": "SML",
+                "monthly_qty": "7000",
+                "weekly_qty": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-29T09:09:12.029Z",
+          "createdForMonth": "2025-08",
+          "dueDate": "2025-08-28T08:15:00.000Z"
+        },
+        {
+          "id": 1753780080099,
+          "name": "Weekly Production Plan - Week 1 (1-7) - August 2025",
+          "assignedRole": "plant_head",
+          "status": "completed",
+          "dependencies": [
+            1753780080098
+          ],
+          "formId": "F-PRODUCTION-PLAN-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753780080098
+          },
+          "formData": {
+            "month_start_date": "2025-08-01",
+            "week_number": 1,
+            "week_dates": "1-7",
+            "rows": [
+              {
+                "item_name": "CV Charger Dual USB",
+                "customer_name": "Eicher",
+                "monthly_qty": "2000",
+                "weekly_qty": "500"
+              },
+              {
+                "item_name": "Micro Siren",
+                "customer_name": "SML",
+                "monthly_qty": "7000",
+                "weekly_qty": "1500"
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-29T09:09:30.828Z",
+          "createdForMonth": "2025-08"
+        },
+        {
+          "id": 1753780080100,
+          "name": "Weekly Production Plan - Week 2 (8-14) - August 2025",
+          "assignedRole": "plant_head",
+          "status": "pending",
+          "dependencies": [
+            1753780080098
+          ],
+          "formId": "F-PRODUCTION-PLAN-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753780080098
+          },
+          "formData": {
+            "month_start_date": "2025-08-01",
+            "week_number": 2,
+            "week_dates": "8-14",
+            "rows": [
+              {
+                "item_name": "CV Charger Dual USB",
+                "customer_name": "Eicher",
+                "monthly_qty": "2000",
+                "weekly_qty": ""
+              },
+              {
+                "item_name": "Micro Siren",
+                "customer_name": "SML",
+                "monthly_qty": "7000",
+                "weekly_qty": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-29T09:08:00.078Z",
+          "createdForMonth": "2025-08"
+        },
+        {
+          "id": 1753780080101,
+          "name": "Weekly Production Plan - Week 3 (15-21) - August 2025",
+          "assignedRole": "plant_head",
+          "status": "pending",
+          "dependencies": [
+            1753780080098
+          ],
+          "formId": "F-PRODUCTION-PLAN-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753780080098
+          },
+          "formData": {
+            "month_start_date": "2025-08-01",
+            "week_number": 3,
+            "week_dates": "15-21",
+            "rows": [
+              {
+                "item_name": "CV Charger Dual USB",
+                "customer_name": "Eicher",
+                "monthly_qty": "2000",
+                "weekly_qty": ""
+              },
+              {
+                "item_name": "Micro Siren",
+                "customer_name": "SML",
+                "monthly_qty": "7000",
+                "weekly_qty": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-29T09:08:00.078Z",
+          "createdForMonth": "2025-08"
+        },
+        {
+          "id": 1753780080102,
+          "name": "Weekly Production Plan - Week 4 (22-28) - August 2025",
+          "assignedRole": "plant_head",
+          "status": "pending",
+          "dependencies": [
+            1753780080098
+          ],
+          "formId": "F-PRODUCTION-PLAN-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753780080098
+          },
+          "formData": {
+            "month_start_date": "2025-08-01",
+            "week_number": 4,
+            "week_dates": "22-28",
+            "rows": [
+              {
+                "item_name": "CV Charger Dual USB",
+                "customer_name": "Eicher",
+                "monthly_qty": "2000",
+                "weekly_qty": ""
+              },
+              {
+                "item_name": "Micro Siren",
+                "customer_name": "SML",
+                "monthly_qty": "7000",
+                "weekly_qty": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-29T09:08:00.078Z",
+          "createdForMonth": "2025-08"
+        },
+        {
+          "id": 1753780080103,
+          "name": "Weekly Production Plan - Week 5 (29-31) - August 2025",
+          "assignedRole": "plant_head",
+          "status": "pending",
+          "dependencies": [
+            1753780080098
+          ],
+          "formId": "F-PRODUCTION-PLAN-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753780080098
+          },
+          "formData": {
+            "month_start_date": "2025-08-01",
+            "week_number": 5,
+            "week_dates": "29-31",
+            "rows": [
+              {
+                "item_name": "CV Charger Dual USB",
+                "customer_name": "Eicher",
+                "monthly_qty": "2000",
+                "weekly_qty": ""
+              },
+              {
+                "item_name": "Micro Siren",
+                "customer_name": "SML",
+                "monthly_qty": "7000",
+                "weekly_qty": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-29T09:08:00.078Z",
+          "createdForMonth": "2025-08"
+        },
+        {
+          "id": 1753780080104,
+          "name": "Daily Production Plan - Week 1 Day 1",
+          "assignedRole": "production_manager",
+          "status": "completed",
+          "dependencies": [
+            1753780080099
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753780080099
+          },
+          "formData": {
+            "date": "2025-07-01",
+            "rows": [
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Akhilesh",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "100",
+                "h1_actual": "",
+                "h2_plan": "",
+                "h2_actual": "",
+                "ot_plan": "",
+                "ot_actual": "",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "target_qty": "100",
+                "actual_production": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-29T09:10:09.647Z"
+        },
+        {
+          "id": 1753780080105,
+          "name": "Daily Production Plan - Week 1 Day 2",
+          "assignedRole": "production_manager",
+          "status": "completed",
+          "dependencies": [
+            1753780080099
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753780080099
+          },
+          "formData": {
+            "date": "2025-08-02",
+            "rows": [
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Naresh ",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "200",
+                "h1_actual": "",
+                "h2_plan": "",
+                "h2_actual": "",
+                "ot_plan": "",
+                "ot_actual": "",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "target_qty": "200",
+                "actual_production": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-29T10:02:17.721Z"
+        },
+        {
+          "id": 1753780080106,
+          "name": "Daily Production Plan - Week 1 Day 3",
+          "assignedRole": "production_manager",
+          "status": "completed",
+          "dependencies": [
+            1753780080099
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753780080099
+          },
+          "formData": {
+            "date": "2025-08-03",
+            "rows": [
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Naresh ",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "500",
+                "h1_actual": "",
+                "h2_plan": "",
+                "h2_actual": "",
+                "ot_plan": "",
+                "ot_actual": "",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "target_qty": "500",
+                "actual_production": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-29T10:20:35.715Z"
+        },
+        {
+          "id": 1753780080107,
+          "name": "Daily Production Plan - Week 1 Day 4",
+          "assignedRole": "production_manager",
+          "status": "in_process",
+          "dependencies": [
+            1753780080099
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753780080099
+          },
+          "formData": {
+            "date": "2025-08-04",
+            "rows": [
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Akhilesh",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "500",
+                "h1_actual": "",
+                "h2_plan": "100",
+                "h2_actual": "",
+                "ot_plan": "",
+                "ot_actual": "",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "target_qty": "600",
+                "actual_production": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              },
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Naresh ",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "400",
+                "h1_actual": "",
+                "h2_plan": "200",
+                "h2_actual": "",
+                "ot_plan": "",
+                "ot_actual": "",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "target_qty": "600",
+                "actual_production": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-29T10:27:57.808Z"
+        },
+        {
+          "id": 1753780080108,
+          "name": "Daily Production Plan - Week 1 Day 5",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1753780080099
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753780080099
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-29T09:09:30.830Z"
+        },
+        {
+          "id": 1753780080109,
+          "name": "Daily Production Plan - Week 1 Day 6",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1753780080099
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753780080099
+          },
+          "formData": null,
+          "lastUpdated": "2025-07-29T09:09:30.830Z"
+        },
+        {
+          "id": 1753780080110,
+          "name": "Daily Production Report - Week 1 Day 1",
+          "assignedRole": "production_manager",
+          "status": "completed",
+          "dependencies": [
+            1753780080104
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753780080104
+          },
+          "formData": {
+            "date": "2025-07-01",
+            "rows": [
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Akhilesh",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "100",
+                "h2_plan": "",
+                "ot_plan": "",
+                "target_qty": "100",
+                "h1_actual": "50",
+                "h2_actual": "",
+                "ot_actual": "",
+                "actual_production": "49.99",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-29T09:10:28.025Z"
+        },
+        {
+          "id": 1753780080111,
+          "name": "Daily Production Report - Week 1 Day 2",
+          "assignedRole": "production_manager",
+          "status": "completed",
+          "dependencies": [
+            1753780080105
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753780080105
+          },
+          "formData": {
+            "date": "2025-08-02",
+            "rows": [
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Naresh ",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "200",
+                "h2_plan": "",
+                "ot_plan": "",
+                "target_qty": "200",
+                "h1_actual": "200",
+                "h2_actual": "",
+                "ot_actual": "",
+                "actual_production": "200",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-29T16:07:33.820Z"
+        },
+        {
+          "id": 1753780080112,
+          "name": "Daily Production Report - Week 1 Day 3",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1753780080106
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753780080106
+          },
+          "formData": {
+            "date": "2025-08-03",
+            "rows": [
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Naresh ",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "500",
+                "h2_plan": "",
+                "ot_plan": "",
+                "target_qty": "500",
+                "h1_actual": "",
+                "h2_actual": "",
+                "ot_actual": "",
+                "actual_production": "",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-29T10:03:35.177Z"
+        },
+        {
+          "id": 1753780080113,
+          "name": "Daily Production Report - Week 1 Day 4",
+          "assignedRole": "production_manager",
+          "status": "pending",
+          "dependencies": [
+            1753780080107
+          ],
+          "formId": "F-DAILY-PRODUCTION-ENTRY",
+          "trigger": {
+            "type": "event",
+            "event": "task_completed",
+            "taskId": 1753780080107
+          },
+          "formData": {
+            "date": "2025-08-04",
+            "rows": [
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Akhilesh",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "500",
+                "h2_plan": "100",
+                "ot_plan": "",
+                "target_qty": "600",
+                "h1_actual": "",
+                "h2_actual": "",
+                "ot_actual": "",
+                "actual_production": "",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              },
+              {
+                "dept_name": "Smt line",
+                "operator_name": "Naresh ",
+                "work": "cv charger usb pcb smt work",
+                "h1_plan": "400",
+                "h2_plan": "200",
+                "ot_plan": "",
+                "target_qty": "600",
+                "h1_actual": "",
+                "h2_actual": "",
+                "ot_actual": "",
+                "actual_production": "",
+                "quality_defects": "",
+                "defect_details": "",
+                "responsible_person": "",
+                "production_percentage": "",
+                "reason": "",
+                "rework": ""
+              }
+            ]
+          },
+          "lastUpdated": "2025-07-29T10:27:57.808Z"
+        }
+      ]
+    }
+  ]
+}

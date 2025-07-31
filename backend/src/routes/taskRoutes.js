@@ -10,11 +10,15 @@ const {
   getAllFormSubmissionsForUser,
   triggerEvent,
   exportTaskToExcel,
+  approveDailyTask,
+  rejectDailyTask,
+  reassignDailyTask,
+  exportTaskToPDF,
+  assignTaskToUser,
+  getAvailableUsersForRole,
+  deleteTask,
 } = require("../controllers/taskController");
 const { findTask } = require("../controllers/taskController");
-const { triggerDependentTasks } = require("../services/taskTriggers");
-const { readDB, writeDB } = require("../utils/dbHelper");
-const { readFormsDB } = require("../utils/formsDbHelper");
 
 router.get("/users", getUsers);
 
@@ -33,5 +37,17 @@ router.get("/form-submissions", getAllFormSubmissionsForUser);
 router.post("/trigger-event", triggerEvent);
 
 router.get("/:id/export-excel", exportTaskToExcel);
+router.get("/:id/export-pdf", exportTaskToPDF);
+
+router.post("/:id/approve", approveDailyTask);
+router.post("/:id/reject", rejectDailyTask);
+router.post("/:id/reassign", reassignDailyTask);
+
+// New routes for user assignment
+router.post("/:id/assign-user", assignTaskToUser);
+router.get("/available-users/:role", getAvailableUsersForRole);
+
+// Delete task route
+router.delete("/:id", deleteTask);
 
 module.exports = router;

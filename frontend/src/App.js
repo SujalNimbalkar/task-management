@@ -1,15 +1,29 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import TaskList from "./components/tasks/TaskList/TaskList";
+import AuthPage from "./components/auth/AuthPage";
 import { fetchTasks, fetchUsers } from "./services/api";
+import { useAuth } from "./contexts/AuthContext";
+import {
+  TIME_CATEGORIES,
+  STATUS_CATEGORIES,
+  getTimeCategoryIds,
+  getStatusCategoryIds,
+  filterTasksByTimeAndStatus,
+  getTaskCountByTimeAndStatus,
+  getTimeCategoryCounts,
+  getStatusCategoryCounts,
+  isTemplateTask,
+} from "./utils/taskCategories";
 
 function App() {
+  const { databaseUser, loading: authLoading, signOut } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState("monthly");
+  const [selectedTimeCategory, setSelectedTimeCategory] = useState("all");
+  const [selectedStatusCategory, setSelectedStatusCategory] = useState("all");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -17,9 +31,6 @@ function App() {
       try {
         const usersData = await fetchUsers();
         setUsers(usersData);
-        if (usersData.length > 0) {
-          setSelectedUser(usersData[0].id.toString());
-        }
       } catch (err) {
         setError("Failed to load users");
         console.error("Error loading users:", err);
@@ -30,15 +41,17 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (selectedUser) {
+    if (databaseUser) {
       loadTasks();
     }
-  }, [selectedUser]);
+  }, [databaseUser]);
 
   const loadTasks = async () => {
+    if (!databaseUser) return;
+
     setLoading(true);
     try {
-      const tasksData = await fetchTasks(selectedUser);
+      const tasksData = await fetchTasks(databaseUser.id.toString());
       setTasks(tasksData);
       setError(null);
     } catch (err) {
@@ -53,31 +66,57 @@ function App() {
     loadTasks();
   };
 
-  const filterTasksByType = (type) => {
-    switch (type) {
-      case "monthly":
-        return tasks.filter((task) =>
-          task.name.includes("Monthly Production Plan")
-        );
-      case "weekly":
-        return tasks.filter((task) =>
-          task.name.includes("Weekly Production Plan")
-        );
-      case "daily":
-        return tasks.filter(
-          (task) =>
-            task.name.includes("Daily Production") ||
-            task.name.includes("Action Plan")
-        );
-      default:
-        return tasks;
-    }
+  const getTimeCategoryCount = (timeCategory) => {
+    return getTaskCountByTimeAndStatus(
+      tasks,
+      timeCategory,
+      selectedStatusCategory
+    );
   };
 
-  const getTabCount = (type) => {
-    return filterTasksByType(type).length;
+  const getStatusCategoryCount = (statusCategory) => {
+    return getTaskCountByTimeAndStatus(
+      tasks,
+      selectedTimeCategory,
+      statusCategory
+    );
   };
 
+  const getTimeCategoryDisplayName = (timeCategory) => {
+    return TIME_CATEGORIES[timeCategory]?.name || "All Time Periods";
+  };
+
+  const getStatusCategoryDisplayName = (statusCategory) => {
+    return STATUS_CATEGORIES[statusCategory]?.name || "All Status";
+  };
+
+  const getTimeCategoryIcon = (timeCategory) => {
+    return TIME_CATEGORIES[timeCategory]?.icon || "📅";
+  };
+
+  const getStatusCategoryIcon = (statusCategory) => {
+    return STATUS_CATEGORIES[statusCategory]?.icon || "📋";
+  };
+
+  const getFilteredTasks = () => {
+    return filterTasksByTimeAndStatus(
+      tasks,
+      selectedTimeCategory,
+      selectedStatusCategory
+    );
+  };
+
+  // Show loading while auth is initializing
+  if (authLoading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  // Show auth page if user is not authenticated
+  if (!databaseUser) {
+    return <AuthPage />;
+  }
+
+  // Show error if there's an error loading data
   if (error) {
     return (
       <div className="App">
@@ -125,32 +164,52 @@ function App() {
         </div>
 
         <nav className="sidebar-nav">
+          {/* Time Categories Section */}
           <div className="nav-section">
-            <div className="nav-section-title">Task Categories</div>
-            <div
-              className={`nav-item ${activeTab === "monthly" ? "active" : ""}`}
-              onClick={() => setActiveTab("monthly")}
-            >
-              <span className="nav-item-icon">📅</span>
-              <span>Monthly Tasks</span>
-              <span className="nav-item-count">{getTabCount("monthly")}</span>
-            </div>
-            <div
-              className={`nav-item ${activeTab === "weekly" ? "active" : ""}`}
-              onClick={() => setActiveTab("weekly")}
-            >
-              <span className="nav-item-icon">📊</span>
-              <span>Weekly Tasks</span>
-              <span className="nav-item-count">{getTabCount("weekly")}</span>
-            </div>
-            <div
-              className={`nav-item ${activeTab === "daily" ? "active" : ""}`}
-              onClick={() => setActiveTab("daily")}
-            >
-              <span className="nav-item-icon">📋</span>
-              <span>Daily Tasks</span>
-              <span className="nav-item-count">{getTabCount("daily")}</span>
-            </div>
+            <div className="nav-section-title">Time Categories</div>
+            {getTimeCategoryIds().map((timeCategory) => (
+              <div
+                key={timeCategory}
+                className={`nav-item ${
+                  selectedTimeCategory === timeCategory ? "active" : ""
+                }`}
+                onClick={() => setSelectedTimeCategory(timeCategory)}
+                data-category="time"
+                data-value={timeCategory}
+              >
+                <span className="nav-item-icon">
+                  {getTimeCategoryIcon(timeCategory)}
+                </span>
+                <span>{getTimeCategoryDisplayName(timeCategory)}</span>
+                <span className="nav-item-count">
+                  {getTimeCategoryCount(timeCategory)}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Status Categories Section */}
+          <div className="nav-section">
+            <div className="nav-section-title">Status Categories</div>
+            {getStatusCategoryIds().map((statusCategory) => (
+              <div
+                key={statusCategory}
+                className={`nav-item ${
+                  selectedStatusCategory === statusCategory ? "active" : ""
+                }`}
+                onClick={() => setSelectedStatusCategory(statusCategory)}
+                data-category="status"
+                data-value={statusCategory}
+              >
+                <span className="nav-item-icon">
+                  {getStatusCategoryIcon(statusCategory)}
+                </span>
+                <span>{getStatusCategoryDisplayName(statusCategory)}</span>
+                <span className="nav-item-count">
+                  {getStatusCategoryCount(statusCategory)}
+                </span>
+              </div>
+            ))}
           </div>
 
           <div className="nav-section">
@@ -183,104 +242,105 @@ function App() {
             </button>
             <h1>Production Planning Task Management</h1>
           </div>
+          <div className="header-actions">
+            <button
+              className="logout-button"
+              onClick={signOut}
+              title="Sign Out"
+            >
+              🚪 Sign Out
+            </button>
+          </div>
         </div>
 
         <div className="content-container">
-          <div className="user-selector">
-            <label htmlFor="user-select">Select User:</label>
-            <select
-              id="user-select"
-              value={selectedUser}
-              onChange={(e) => setSelectedUser(e.target.value)}
-            >
-              {users.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name} ({user.role})
-                </option>
-              ))}
-            </select>
+          {/* User Info and Filter Display */}
+          <div className="filter-display">
+            <div className="user-info">
+              <span className="user-label">Current User:</span>
+              <span className="user-name">
+                {databaseUser.name} (
+                {databaseUser.roles
+                  ? databaseUser.roles.join(", ")
+                  : "No roles"}
+                )
+              </span>
+            </div>
+            <div className="active-filters">
+              <span className="filter-label">Active Filters:</span>
+              <span className="filter-badge time-filter">
+                {getTimeCategoryDisplayName(selectedTimeCategory)}
+              </span>
+              <span className="filter-badge status-filter">
+                {getStatusCategoryDisplayName(selectedStatusCategory)}
+              </span>
+              <span className="filter-count">
+                {getFilteredTasks().length} tasks found
+              </span>
+            </div>
           </div>
 
-          <div className="task-tabs">
-            <div className="tab-navigation">
-              <button
-                className={`tab-button ${
-                  activeTab === "monthly" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("monthly")}
-              >
-                Monthly Tasks ({getTabCount("monthly")})
-              </button>
-              <button
-                className={`tab-button ${
-                  activeTab === "weekly" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("weekly")}
-              >
-                Weekly Tasks ({getTabCount("weekly")})
-              </button>
-              <button
-                className={`tab-button ${
-                  activeTab === "daily" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("daily")}
-              >
-                Daily Tasks ({getTabCount("daily")})
-              </button>
+          {/* Dual Filter Tabs */}
+          <div className="dual-filter-tabs">
+            {/* Time Filter Tabs */}
+            <div className="filter-section">
+              <h3>Time Period</h3>
+              <div className="tab-navigation time-tabs">
+                {getTimeCategoryIds().map((timeCategory) => (
+                  <button
+                    key={timeCategory}
+                    className={`tab-button ${
+                      selectedTimeCategory === timeCategory ? "active" : ""
+                    }`}
+                    onClick={() => setSelectedTimeCategory(timeCategory)}
+                    data-category="time"
+                    data-value={timeCategory}
+                  >
+                    {getTimeCategoryDisplayName(timeCategory)} (
+                    {getTimeCategoryCount(timeCategory)})
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="tab-content">
-              <div
-                className={`tab-panel ${
-                  activeTab === "monthly" ? "active" : ""
-                }`}
-              >
-                <div className="task-list">
-                  <h3>Monthly Production Plans</h3>
-                  {loading ? (
-                    <div className="loading">Loading tasks...</div>
-                  ) : (
-                    <TaskList
-                      tasks={filterTasksByType("monthly")}
-                      onTaskUpdate={handleTaskUpdate}
-                    />
-                  )}
-                </div>
+            {/* Status Filter Tabs */}
+            <div className="filter-section">
+              <h3>Status</h3>
+              <div className="tab-navigation status-tabs">
+                {getStatusCategoryIds().map((statusCategory) => (
+                  <button
+                    key={statusCategory}
+                    className={`tab-button ${
+                      selectedStatusCategory === statusCategory ? "active" : ""
+                    }`}
+                    onClick={() => setSelectedStatusCategory(statusCategory)}
+                    data-category="status"
+                    data-value={statusCategory}
+                  >
+                    {getStatusCategoryDisplayName(statusCategory)} (
+                    {getStatusCategoryCount(statusCategory)})
+                  </button>
+                ))}
               </div>
+            </div>
+          </div>
 
-              <div
-                className={`tab-panel ${
-                  activeTab === "weekly" ? "active" : ""
-                }`}
-              >
-                <div className="task-list">
-                  <h3>Weekly Production Plans</h3>
-                  {loading ? (
-                    <div className="loading">Loading tasks...</div>
-                  ) : (
-                    <TaskList
-                      tasks={filterTasksByType("weekly")}
-                      onTaskUpdate={handleTaskUpdate}
-                    />
-                  )}
-                </div>
-              </div>
-
-              <div
-                className={`tab-panel ${activeTab === "daily" ? "active" : ""}`}
-              >
-                <div className="task-list">
-                  <h3>Daily Production Plans & Reports</h3>
-                  {loading ? (
-                    <div className="loading">Loading tasks...</div>
-                  ) : (
-                    <TaskList
-                      tasks={filterTasksByType("daily")}
-                      onTaskUpdate={handleTaskUpdate}
-                    />
-                  )}
-                </div>
-              </div>
+          {/* Task List */}
+          <div className="task-list-container">
+            <div className="task-list">
+              <h3>
+                {getTimeCategoryDisplayName(selectedTimeCategory)} -{" "}
+                {getStatusCategoryDisplayName(selectedStatusCategory)}
+              </h3>
+              {loading ? (
+                <div className="loading">Loading tasks...</div>
+              ) : (
+                <TaskList
+                  tasks={getFilteredTasks()}
+                  onTaskUpdate={handleTaskUpdate}
+                  currentUser={databaseUser}
+                />
+              )}
             </div>
           </div>
         </div>
