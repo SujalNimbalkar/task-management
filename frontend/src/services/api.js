@@ -1,4 +1,6 @@
-const API_BASE_URL = "http://localhost:4000/api";
+import { API_CONFIG, getApiUrl } from '../config/api';
+
+const API_BASE_URL = API_CONFIG.BASE_URL;
 const BASE_TASKS_PATH = "/tasks"; // set to "/tasks" for old, "" for new
 
 async function handleResponse(response) {

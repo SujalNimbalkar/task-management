@@ -7,6 +7,7 @@ import {
   exportTaskToPDF,
   deleteTask,
 } from "../../../services/api";
+import { getApiUrl } from "../../../config/api";
 import DynamicForm from "../../forms/DynamicForm/DynamicForm";
 import { isTaskTemplate } from "../../../utils/taskCategories";
 import "./TaskItem.css";
@@ -111,7 +112,7 @@ const TaskItem = ({ task, onTaskUpdate, currentUser }) => {
   const handleExportExcel = async () => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/tasks/${task.id}/export-excel`,
+        getApiUrl(`tasks/${task.id}/export-excel`),
         {
           method: "GET",
           headers: {
