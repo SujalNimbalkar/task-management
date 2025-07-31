@@ -377,6 +377,9 @@ cron.schedule("0 17 31 * *", async () => {
             );
             if (
               istDay === 31 &&
+              istHour === 17 &&
+              istMinute >= 0 &&
+              istMinute < 5 &&
               (!task.lastUpdated || !isThisMonth(task.lastUpdated))
             ) {
               // Create a new task for this month instead of reusing the template

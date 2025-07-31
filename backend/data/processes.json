@@ -600,6 +600,31 @@
         "createdForMonth": "2025-08",
         "isTemplate": false,
         "templateId": 2002
+      },
+      {
+        "id": 1753961609122,
+        "name": "Monthly Production Plan - August 2025 (MANUAL TEST)",
+        "assignedRole": "plant_head",
+        "status": "pending",
+        "dependencies": [],
+        "formId": "F-PRODUCTION-PLAN-ENTRY",
+        "trigger": {
+          "type": "time",
+          "recurrence": "monthly",
+          "dayOfMonth": "31"
+        },
+        "dueDateRule": {
+          "type": "end_of_month_minus_days",
+          "days": 3
+        },
+        "formData": {
+          "month_start_date": "2025-08-01",
+          "rows": []
+        },
+        "lastUpdated": "2025-07-31T11:33:29.067Z",
+        "createdForMonth": "2025-08",
+        "isTestTask": true,
+        "dueDate": "2025-08-28T11:38:00.000Z"
       }
     ]
   }

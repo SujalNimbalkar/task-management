@@ -1,4 +1,4 @@
-import { API_CONFIG, getApiUrl } from '../config/api';
+import { API_CONFIG, getApiUrl } from "../config/api";
 
 const API_BASE_URL = API_CONFIG.BASE_URL;
 const BASE_TASKS_PATH = "/tasks"; // set to "/tasks" for old, "" for new
