@@ -1,4 +1,4 @@
-const databaseService = require("../services/databaseService");
+const { readDB, writeDB } = require("../utils/dbHelper");
 const cron = require("node-cron");
 const dateFnsTz = require("date-fns-tz");
 console.log("[DEBUG] dateFnsTz exports:", Object.keys(dateFnsTz));
@@ -241,7 +241,7 @@ async function testMonthlyTaskCreation() {
             trigger: {
               type: "time",
               recurrence: "monthly",
-              dayOfMonth: "29",
+              dayOfMonth: "31",
             },
             dueDateRule: {
               type: "end_of_month_minus_days",
@@ -294,7 +294,7 @@ async function testMonthlyTaskCreation() {
   }
 }
 
-cron.schedule("10 17 * * *", async () => {
+cron.schedule("0 17 31 * *", async () => {
   const startTime = Date.now();
   try {
     const now = new Date();
@@ -360,7 +360,7 @@ cron.schedule("10 17 * * *", async () => {
 
         // Use IST time for monthly trigger
         if (task.trigger.recurrence === "monthly") {
-          if (task.id === 1001 && task.trigger.dayOfMonth === "30") {
+          if (task.id === 1001 && task.trigger.dayOfMonth === "31") {
             console.log(
               `[CRON][DEBUG] Checking monthly trigger for task ${task.id}:`
             );
@@ -375,10 +375,8 @@ cron.schedule("10 17 * * *", async () => {
                 task.lastUpdated
               )}`
             );
-            console.log(`[CRON][DEBUG] - task.status: ${task.status}`);
             if (
-              istDay === 30 &&
-              task.status === "pending" &&
+              istDay === 31 &&
               (!task.lastUpdated || !isThisMonth(task.lastUpdated))
             ) {
               // Create a new task for this month instead of reusing the template
@@ -410,7 +408,7 @@ cron.schedule("10 17 * * *", async () => {
                 trigger: {
                   type: "time",
                   recurrence: "monthly",
-                  dayOfMonth: "30",
+                  dayOfMonth: "31",
                 },
                 dueDateRule: {
                   type: "end_of_month_minus_days",
